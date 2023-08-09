@@ -1,0 +1,134 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap");
+
+* {
+  scroll-behavior: smooth;
+}
+
+.anchors {
+  padding: 4vw;
+  text-decoration: none;
+  font-size: 22px;
+  font-family: "Satoshi", sans-serif;
+}
+
+#proj {
+  display: block;
+  margin: 0 auto;
+}
+
+#elems {
+  margin: 0 auto;
+  box-shadow: 0 0 0 19px #333;
+  border-radius: 10px;
+  max-width: 70vw;
+  font-family: "Satoshi", sans-serif;
+  text-align: center;
+  color: #333;
+}
+
+#secoes {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 10vh;
+  background-color: #151515;
+  text-align: center;
+  position: sticky;
+  top: 0px;
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  background: linear-gradient(100deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  box-shadow: 0 10px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.imgs {
+  width: 800px;
+  flex-wrap: wrap;
+}
+
+.caixas {
+  padding-bottom: 30px;
+}
+
+.webmadewell {
+  background-color: white;
+}
+
+body {
+  margin: 0;
+}
+
+.sample-header {
+  text-align: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  background-image: url("https://www.york.ac.uk/media/study/courses/undergraduate/computerscience/bsc-beng-computer-science-banner.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.sample-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: MidnightBlue;
+  opacity: 0.3;
+}
+
+.sample-header-section {
+  position: relative;
+  padding: 12.5% 0 12.5%;
+  /* max-width: 640px; */
+  margin-left: auto;
+  margin-right: auto;
+  color: white;
+  text-shadow: 0px 4px 2px rgba(0, 0, 0, 0.5);
+  font-family: "Satoshi", sans-serif;
+}
+
+h1 {
+  text-align: center;
+  font-weight: 500;
+  font-size: 50px;
+}
+
+#titulos {
+  color: antiquewhite;
+}
+
+h2 {
+  font-weight: 400;
+  font-size: 30px;
+}
+
+.textos {
+  color: aliceblue;
+  max-width: 70vw;
+  margin: 0 auto;
+  text-align: center;
+  text-justify: inter-word;
+  padding-bottom: 40px;
+  font-size: 20px;
+  padding: 0px 40px 40px 40px;
+  font-family: "Satoshi", sans-serif;
+}
+
+iframe {
+  padding-bottom: 30px;
+}
+
+.sample-section-wrap {
+  position: relative;
+  background-color: #0f0f0f;
+  /* background-color: white; */
+}
+
+.sample-section {
+  padding: 40px;
+}
