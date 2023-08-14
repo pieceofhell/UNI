@@ -2,18 +2,25 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Programa {
-    
+
     public static void copiaInvChar() {
         try {
             File ArqR = new File("frase.txt");
-            File ArqW = new File("vazio.txt");
+            File ArqW = new File("invertido.txt");
 
             Scanner sc = new Scanner(ArqR);
             PrintWriter pw = new PrintWriter(ArqW);
 
             while (sc.hasNextLine()) {
                 String linha = sc.nextLine();
-                pw.println(linha);
+                String invertida = "";
+
+                for (int i = linha.length() - 1; i >= 0; i--) {
+                    char ch = linha.charAt(i);
+                    invertida += ch;
+                }
+
+                pw.println(invertida);
             }
 
             sc.close();
@@ -65,6 +72,7 @@ public class Programa {
             e.printStackTrace();
         }
     }
+
     public static void main(String args[]) {
 
         try {
@@ -101,5 +109,10 @@ public class Programa {
         // e copiando-o para outro arquivo, conforme pedido
 
         copiaMaiuscula();
+
+        // Método declarado acima da main para copiar o conteúdo
+        // de um arquivo, invertendo-o e o copiando para outro arquivo, conforme pedido
+
+        copiaInvChar();
     }
 }
