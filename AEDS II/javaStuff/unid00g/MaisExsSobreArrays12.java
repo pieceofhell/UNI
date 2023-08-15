@@ -1,40 +1,29 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class MaisExsSobreArrays12 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
-  public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
+        System.out.print("Digite o numero de elementos (N): ");
+        int N = sc.nextInt();
 
-    int n = 0;
+        int[] arr = new int[N];
 
-    System.out.println("Insira o tamanho da array:");
-    n = sc.nextInt();
+        for (int i = 0; i < N; i++) {
+            System.out.print("Digite o " + (i + 1) + "º elemento: ");
+            arr[i] = sc.nextInt();
+        }
 
-    int[] arr = new int[n];
+        if (N % 2 == 0) {
+            System.out.println("Soma dos elementos adjacentes:");
+            for (int i = 0; i < N; i += 2) {
+                int sum = arr[i] + arr[i + 1];
+                System.out.println(arr[i] + " + " + arr[i + 1] + " = " + sum);
+            }
+        } else {
+            System.out.println("O numero de elementos é impar, não eh possivel realizar a soma dos adjacentes.");
+        }
 
-    System.out.println("Insira os numeros:\n");
-    for (int i = 0; i < n; i++) {
-      if (sc.hasNextInt()) {
-        arr[i] = sc.nextInt();
-      }
+        sc.close();
     }
-
-    int avg = 0;
-
-    for (int i = 0; i < arr.length; i++) {
-      avg += arr[i];
-    }
-    
-    avg /= n;
-
-    for (int i = 0; i < arr.length; i++) {
-      if (arr[i] >= avg) {
-        System.out.println("Numeros acima da media: " + arr[i]);
-      }
-    }
-
-    System.out.println("Media dos numeros: " + avg);
-
-    sc.close();
-  }
 }
