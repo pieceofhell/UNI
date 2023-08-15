@@ -33,7 +33,7 @@ public class MaisExsSobreArrays12 {
       }
     }
 
-    System.out.println("Medias dos numeros: " + avg);
+    System.out.println("Media dos numeros: " + avg);
 
     sc.close();
   }
