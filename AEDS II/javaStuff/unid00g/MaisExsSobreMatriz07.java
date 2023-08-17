@@ -2,20 +2,17 @@ import java.util.*;
 
 public class MaisExsSobreMatriz07 {
 
-  public static void matLineAvg(int[][] arr1) {
+  public static void matColAvg(int[][] arr1) {
     System.out.println("Media dos elementos de cada coluna da matriz:");
     double sum = 0;
-    int count = 0;
-    for (int i = 0; i < arr1.length; i++) {
-      count++;
-      for (int j = 0; j < arr1[i].length; j++) {
-        sum += arr1[i][j];
+    for (int i = 0; i < arr1[0].length; i++) { 
+      for (int j = 0; j < arr1.length; j++) {
+        sum += arr1[j][i];
       }
-      sum /= count;
-      System.out.println(sum);
+      double avg = sum / arr1.length;
+      System.out.println(avg);
       sum = 0;
-      count = 0;
-    }
+    }    
   }
 
   public static void main(String[] args) {
@@ -44,7 +41,7 @@ public class MaisExsSobreMatriz07 {
       System.out.println();
     }
 
-    matLineAvg(arr1);
+    matColAvg(arr1);
 
     sc.close();
   }
