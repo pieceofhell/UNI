@@ -13,10 +13,12 @@ public class CiframentoCesar {
             for (int i = 0; i < linha.length(); i++) {
                 char ch = linha.charAt(i);
 
-                if (linha.equals("FIM")) {
+                if (ch == '\uFFFD') {
+                    crypto.append(ch);
+                    continue;
+                } else if (linha.equals("FIM")) {
                     fim = true;
                 } else {
-
                     char encryptedChar = (char) (ch + 3);
                     crypto.append(encryptedChar);
                 }
