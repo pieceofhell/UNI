@@ -1,4 +1,4 @@
-from unidecode import unidecode
+#from unidecode import unidecode
 
 while True:
     ogString = input()
@@ -7,7 +7,7 @@ while True:
         break
     
     cmpString = ogString.replace(" ", "")
-    cmpString = unidecode(cmpString)
+   #  cmpString = unidecode(cmpString)
     cmpString = cmpString.lower()
     cmpString = cmpString.replace("!", "")
     cmpString = cmpString.replace("?", "")

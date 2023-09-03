@@ -8,22 +8,21 @@ public class CiframentoCesar {
         boolean fim = false;
         while (!fim) {
             linha = sc.nextLine();
-            StringBuilder crypto = new StringBuilder();
+            String crypto = "";
 
             for (int i = 0; i < linha.length(); i++) {
                 char ch = linha.charAt(i);
 
-                if (ch == '\uFFFD') {
-                    crypto.append(ch);
-                    continue;
+                if (ch == 65533) {
+                    crypto += ch;
                 } else if (linha.equals("FIM")) {
                     fim = true;
                 } else {
                     char encryptedChar = (char) (ch + 3);
-                    crypto.append(encryptedChar);
+                    crypto += encryptedChar;
                 }
             }
-            System.out.println(crypto.toString());
+            System.out.println(crypto);
         }
         sc.close();
     }
