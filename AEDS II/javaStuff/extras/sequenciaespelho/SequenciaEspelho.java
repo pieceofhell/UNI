@@ -9,25 +9,19 @@ public class SequenciaEspelho {
       if (sc.hasNextInt()) {
         int start = sc.nextInt();
         int end = sc.nextInt();
+        String str = "";
 
         if (start == 0 && end == 0) {
           break;
         }
 
-        StringBuilder res = new StringBuilder();
-
         for (int i = start; i <= end; i++) {
-          res.append(i);
+          str += i;
         }
-
-        String str = res.toString();
 
         for (int i = str.length() - 1; i >= 0; i--) {
-          res.append(str.charAt(i));
+          str += str.charAt(i);
         }
-
-        str = res.toString();
-
         System.out.println(str);
       } else {
         break;
