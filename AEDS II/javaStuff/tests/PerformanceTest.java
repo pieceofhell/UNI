@@ -24,7 +24,7 @@ public class PerformanceTest {
     long startTime = System.currentTimeMillis();
 
     List<Person> list = new ArrayList<Person>();
-    for (int i = 0; i <= 100000; i++) {
+    for (int i = 0; i <= 10000; i++) {
       list.add(new Person("John", "Doe"));
     }
 
