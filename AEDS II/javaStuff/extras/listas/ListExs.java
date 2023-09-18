@@ -95,10 +95,10 @@ public class ListExs {
     System.out.println(maior);
   }
 
-  void inverteOrdem(){
+  void inverteOrdem() {
     if (n == 0) throw new IllegalArgumentException("Erro");
     int temp;
-    for (int i = 0; i < n/2; i++) {
+    for (int i = 0; i < n / 2; i++) {
       temp = array[i];
       array[i] = array[n - i - 1];
       array[n - i - 1] = temp;
@@ -106,7 +106,7 @@ public class ListExs {
     mostrar();
   }
 
-  void paresMultCinco(){
+  void paresMultCinco() {
     if (n == 0) throw new IllegalArgumentException("Erro");
 
     for (int i = 0; i < n; i++) {

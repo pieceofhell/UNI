@@ -28,9 +28,9 @@ public class FilaCircular {
     inicio = (inicio + 1) % total;
   }
 
-  public void print(){
+  public void print() {
     for (int i = inicio; i != fim; i = (i + 1) % total) {
-        System.out.println(array[i]);
+      System.out.println(array[i]);
     }
-  }  
+  }
 }

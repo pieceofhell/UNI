@@ -32,6 +32,7 @@ public class Main {
     jeff.remover();
     jeff.print();
   }
+
   public static void main(String[] args) {
     FILO();
     // FIFO();
