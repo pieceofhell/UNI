@@ -18,7 +18,7 @@ class TwoSumOpt {
   }
 
   public static void main(String[] args) {
-    int[] arr = new int[] { 3, 4, 9, 6, 4};
+    int[] arr = new int[] { 3, 4, 9, 6, 4 };
     twoSum(arr, 8);
   }
 }
