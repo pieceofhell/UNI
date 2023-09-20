@@ -1,13 +1,14 @@
-import java.util.*;
+import java.util.Arrays;
 
-public class ThekWeakestRows {
+class ThekWeakestRows extends Solution {
 
   static int[] kWeakestRows(int[][] mat, int k) {
     int row = mat.length;
     int col = mat[0].length;
-    
+
     // Use a custom class to store the row index and soldier count
     class RowPower implements Comparable<RowPower> {
+
       int index;
       int power;
 

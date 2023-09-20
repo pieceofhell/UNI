@@ -1,4 +1,4 @@
-class palNum {
+class palNum extends Solution {
     public boolean isPalindrome(int x) {
         String str = Integer.toString(x);
 

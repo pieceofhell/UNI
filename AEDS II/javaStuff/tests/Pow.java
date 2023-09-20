@@ -1,4 +1,4 @@
-class Pow {
+class Pow extends Solution {
 
   static double myPow(double x, int n) {
     if (n == 0) {

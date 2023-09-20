@@ -1,4 +1,4 @@
-class TwoSum {
+class TwoSum extends Solution {
 
   public static void twoSum(int[] nums, int target) {
     int[] foundNums = new int[2];
