@@ -1,9 +1,9 @@
 public class Solution {
 
   public static void main(String[] args) {
-    DecodedStringIndex test = new DecodedStringIndex();
-    String s = "leet2code3";
-    String x = test.decodeAtIndex(s, 10);
+    ReverseWordsString test = new ReverseWordsString();
+    String s = "God Ding";
+    String x = test.reverseWords(s);
     System.out.println(x);
   }
 }
