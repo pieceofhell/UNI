@@ -145,8 +145,6 @@ public class Jogador {
           this.peso = fields.length > 3 ? Double.parseDouble(fields[3]) : -1.0;
           this.universidade = fields.length > 4 ? fields[4] : "nao informado";
           this.anoNascimento = fields.length > 5 ? fields[5] : "nao informado";
-
-          // Verifique o tamanho do array antes de acessar os índices 6 e 7
           this.cidadeNascimento =
             fields.length > 6 ? fields[6] : "nao informado";
           this.estadoNascimento =
@@ -168,7 +166,7 @@ public class Jogador {
       player += estadoNascimento + "]";
       System.out.println(player);
     } else {
-      System.out.println("FODASE");
+      System.out.println("ERRO");
     }
   }
 
@@ -193,7 +191,7 @@ public class Jogador {
     try {
       Jogador jogador = new Jogador();
 
-      String arquivo = "players.csv";
+      String arquivo = "/tmp/players.csv";
 
       jogador.ler(arquivo);
 
