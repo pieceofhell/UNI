@@ -120,7 +120,7 @@ public class Jogador {
     file.close();
   }
 
-  public void buscarPorId(int playerId, String nomeArquivo) throws IOException {
+  public String buscarPorId(int playerId, String nomeArquivo) throws IOException {
     FileReader file = new FileReader(nomeArquivo);
     BufferedReader buffer = new BufferedReader(file);
 
@@ -160,14 +160,17 @@ public class Jogador {
 
     if (found) {
       DecimalFormat df = new DecimalFormat("#0.##");
-      String player = "[" + id + " ## " + nome + " ## " + altura + " ## ";
-      player += df.format(peso) + " ## " + anoNascimento + " ## ";
-      player += universidade + " ## " + cidadeNascimento + " ## ";
-      player += estadoNascimento + "]";
-      System.out.println(player);
+      String players = "[" + id + " ## " + nome + " ## " + altura + " ## ";
+      players += df.format(peso) + " ## " + anoNascimento + " ## ";
+      players += universidade + " ## " + cidadeNascimento + " ## ";
+      players += estadoNascimento + "]";
+      // System.out.println(players);
+      return players;
     } else {
       System.out.println("ERRO");
+      return "ERRO";
     }
+    
   }
 
   public void imprimir() {
@@ -191,13 +194,15 @@ public class Jogador {
     try {
       Jogador jogador = new Jogador();
 
-      String arquivo = "players.csv";
+      String arquivo = "/tmp/players.csv";
 
       jogador.ler(arquivo);
 
       Scanner sc = new Scanner(System.in);
 
       String entrada = "";
+      
+      String omegaString = "";
 
       while (!entrada.equalsIgnoreCase("FIM")) {
         entrada = sc.nextLine();
@@ -205,9 +210,23 @@ public class Jogador {
         if (!entrada.equalsIgnoreCase("FIM")) {
           try {
             int idJogador = Integer.parseInt(entrada);
-            jogador.buscarPorId(idJogador, arquivo);
+            omegaString += jogador.buscarPorId(idJogador, arquivo);
           } catch (NumberFormatException e) {
             System.out.println("ERRO");
+          }
+        }
+      }
+
+      entrada = "";
+
+      while (!entrada.equalsIgnoreCase("FIM")) {
+        entrada = sc.nextLine();
+
+        if (!entrada.equalsIgnoreCase("FIM")) {
+          if (omegaString.contains(entrada)) {
+            System.out.println("SIM");
+          } else {
+            System.out.println("NAO");
           }
         }
       }
