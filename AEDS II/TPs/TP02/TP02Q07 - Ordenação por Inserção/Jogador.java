@@ -142,28 +142,30 @@ public class Jogador {
     return omegaJogadores;
   }
 
-  public static List<Jogador> insertionSort(List<Jogador> jogadoresOrdenados) {
-    int n = jogadoresOrdenados.size();
-    for (int i = 0; i < n - 1; i++) {
-      int minIndex = i;
-      for (int j = i + 1; j < n; j++) {
-        if (
-          jogadoresOrdenados
-            .get(j)
-            .getNome()
-            .compareTo(jogadoresOrdenados.get(minIndex).getNome()) <
-          0
-        ) {
-          minIndex = j;
-        }
-        comparacoes++;
+  public static List<Jogador> insertionSort(List<Jogador> jogadores) {
+    int n = jogadores.size();
+    for (int i = 1; i < n; i++) {
+      Jogador chave = jogadores.get(i);
+      int j = i - 1;
+      while (j >= 0 && compareJogadores(jogadores.get(j), chave) > 0) {
+        jogadores.set(j + 1, jogadores.get(j));
+        j = j - 1;
       }
-      
-      Jogador temp = jogadoresOrdenados.get(i);
-      jogadoresOrdenados.set(i, jogadoresOrdenados.get(minIndex));
-      jogadoresOrdenados.set(minIndex, temp);
+      jogadores.set(j + 1, chave);
+      comparacoes++;
     }
-    return jogadoresOrdenados;
+    return jogadores;
+  }
+
+  public static int compareJogadores(Jogador jogador1, Jogador jogador2) {
+    comparacoes++;
+    int compareAno = jogador1
+      .getAnoNascimento()
+      .compareTo(jogador2.getAnoNascimento());
+    if (compareAno != 0) {
+      return compareAno;
+    }
+    return jogador1.getNome().compareTo(jogador2.getNome());
   }
 
   public static void main(String[] args) {
@@ -218,7 +220,7 @@ public class Jogador {
 
       sc.close();
 
-      FileWriter myWriter = new FileWriter("matricula_selecao.txt");
+      FileWriter myWriter = new FileWriter("matricula_insercao.txt");
       long tempoFinal = System.currentTimeMillis();
       long duracao = tempoFinal - tempoInicial;
       myWriter.write("805688" + "\t" + duracao + "ms" + "\t" + comparacoes);

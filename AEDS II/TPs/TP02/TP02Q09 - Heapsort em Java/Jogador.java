@@ -142,29 +142,52 @@ public class Jogador {
     return omegaJogadores;
   }
 
-  public static List<Jogador> insertionSort(List<Jogador> jogadoresOrdenados) {
-    int n = jogadoresOrdenados.size();
-    for (int i = 0; i < n - 1; i++) {
-      int minIndex = i;
-      for (int j = i + 1; j < n; j++) {
-        if (
-          jogadoresOrdenados
-            .get(j)
-            .getNome()
-            .compareTo(jogadoresOrdenados.get(minIndex).getNome()) <
-          0
-        ) {
-          minIndex = j;
-        }
-        comparacoes++;
-      }
-      
-      Jogador temp = jogadoresOrdenados.get(i);
-      jogadoresOrdenados.set(i, jogadoresOrdenados.get(minIndex));
-      jogadoresOrdenados.set(minIndex, temp);
+  public static List<Jogador> heapSort(List<Jogador> jogadores) {
+    int n = jogadores.size();
+
+    // Construir uma heap máxima
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapify(jogadores, n, i);
     }
-    return jogadoresOrdenados;
-  }
+
+    // Extrair elementos da heap um por um
+    for (int i = n - 1; i >= 0; i--) {
+        // Mover o maior elemento para o final
+        Jogador temp = jogadores.get(0);
+        jogadores.set(0, jogadores.get(i));
+        jogadores.set(i, temp);
+
+        // Chamar heapify na heap reduzida
+        heapify(jogadores, i, 0);
+    }
+    return jogadores;
+}
+
+public static void heapify(List<Jogador> jogadores, int n, int i) {
+    int maior = i;
+    int esquerda = 2 * i + 1;
+    int direita = 2 * i + 2;
+
+    if (esquerda < n && (jogadores.get(esquerda).getAltura() > jogadores.get(maior).getAltura() ||
+        (jogadores.get(esquerda).getAltura() == jogadores.get(maior).getAltura() &&
+        jogadores.get(esquerda).getNome().compareTo(jogadores.get(maior).getNome()) < 0))) {
+        maior = esquerda;
+    }
+
+    if (direita < n && (jogadores.get(direita).getAltura() > jogadores.get(maior).getAltura() ||
+        (jogadores.get(direita).getAltura() == jogadores.get(maior).getAltura() &&
+        jogadores.get(direita).getNome().compareTo(jogadores.get(maior).getNome()) < 0))) {
+        maior = direita;
+    }
+
+    if (maior != i) {
+        Jogador swap = jogadores.get(i);
+        jogadores.set(i, jogadores.get(maior));
+        jogadores.set(maior, swap);
+
+        heapify(jogadores, n, maior);
+    }
+}
 
   public static void main(String[] args) {
     long tempoInicial = System.currentTimeMillis();
@@ -192,7 +215,7 @@ public class Jogador {
 
       // Magia da ordenação
 
-      List<Jogador> jogadoresOrdenados = insertionSort(jogadoresInseridos);
+      List<Jogador> jogadoresOrdenados = heapSort(jogadoresInseridos);
 
       for (Jogador jogador : jogadoresOrdenados) {
         System.out.println(
@@ -218,7 +241,7 @@ public class Jogador {
 
       sc.close();
 
-      FileWriter myWriter = new FileWriter("matricula_selecao.txt");
+      FileWriter myWriter = new FileWriter("matricula_heapsort.txt");
       long tempoFinal = System.currentTimeMillis();
       long duracao = tempoFinal - tempoInicial;
       myWriter.write("805688" + "\t" + duracao + "ms" + "\t" + comparacoes);

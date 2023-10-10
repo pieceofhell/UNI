@@ -8,8 +8,8 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
-class AddTwoLinkedNums extends Solution {
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+// class AddTwoLinkedNums extends Solution {
+//     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         
-    }
-}
+//     }
+// }

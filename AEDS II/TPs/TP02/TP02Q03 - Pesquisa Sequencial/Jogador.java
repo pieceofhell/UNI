@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Scanner;
@@ -120,7 +121,8 @@ public class Jogador {
     file.close();
   }
 
-  public String buscarPorId(int playerId, String nomeArquivo) throws IOException {
+  public String buscarPorId(int playerId, String nomeArquivo)
+    throws IOException {
     FileReader file = new FileReader(nomeArquivo);
     BufferedReader buffer = new BufferedReader(file);
 
@@ -164,13 +166,10 @@ public class Jogador {
       players += df.format(peso) + " ## " + anoNascimento + " ## ";
       players += universidade + " ## " + cidadeNascimento + " ## ";
       players += estadoNascimento + "]";
-      // System.out.println(players);
       return players;
     } else {
-      System.out.println("ERRO");
-      return "ERRO";
+      return "NAO";
     }
-    
   }
 
   public void imprimir() {
@@ -192,6 +191,8 @@ public class Jogador {
 
   public static void main(String[] args) {
     try {
+      long startTime = System.currentTimeMillis();
+
       Jogador jogador = new Jogador();
 
       String arquivo = "/tmp/players.csv";
@@ -201,8 +202,10 @@ public class Jogador {
       Scanner sc = new Scanner(System.in);
 
       String entrada = "";
-      
-      String omegaString = "";
+
+      String[] omegaString = new String[100];
+
+      int i = 0;
 
       while (!entrada.equalsIgnoreCase("FIM")) {
         entrada = sc.nextLine();
@@ -210,28 +213,42 @@ public class Jogador {
         if (!entrada.equalsIgnoreCase("FIM")) {
           try {
             int idJogador = Integer.parseInt(entrada);
-            omegaString += jogador.buscarPorId(idJogador, arquivo);
+            omegaString[i] = jogador.buscarPorId(idJogador, arquivo);
+            i++;
           } catch (NumberFormatException e) {
-            System.out.println("ERRO");
+            System.out.println("ERRO Comparação");
           }
         }
       }
 
       entrada = "";
 
+      int comparacoes = 0;
+
       while (!entrada.equalsIgnoreCase("FIM")) {
         entrada = sc.nextLine();
+        boolean found = false;
 
         if (!entrada.equalsIgnoreCase("FIM")) {
-          if (omegaString.contains(entrada)) {
-            System.out.println("SIM");
-          } else {
+          for (int j = 0; j < i; j++) {
+            comparacoes++;
+            if (omegaString[j].contains(entrada)) {
+              found = true;
+              System.out.println("SIM");
+            }
+          }
+          if (!found) {
             System.out.println("NAO");
           }
         }
       }
 
       sc.close();
+      FileWriter myWriter = new FileWriter("matricula_sequencial.txt");
+      long stopTime = System.currentTimeMillis();
+      long elapsedTime = stopTime - startTime;
+      myWriter.write("805688\t" + elapsedTime + "ms\t" + comparacoes);
+      myWriter.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
