@@ -143,31 +143,57 @@ public class Jogador {
     return omegaJogadores;
   }
 
-  public static List<Jogador> insertionSort(List<Jogador> jogadores) {
-    int n = jogadores.size();
-    for (int i = 1; i < n; i++) {
-      Jogador chave = jogadores.get(i);
-      int j = i - 1;
-      while (j >= 0 && compareJogadores(jogadores.get(j), chave) > 0) {
-        jogadores.set(j + 1, jogadores.get(j));
-        j = j - 1;
-        trocas++;
-      }
-      jogadores.set(j + 1, chave);
-      comparacoes++;
+  public static void mergeSort(List<Jogador> jogadores) {
+    if (jogadores.size() <= 1) {
+      return;
     }
-    return jogadores;
+
+    int meio = jogadores.size() / 2;
+    List<Jogador> metadeEsquerda = new ArrayList<>(jogadores.subList(0, meio));
+    List<Jogador> metadeDireita = new ArrayList<>(
+      jogadores.subList(meio, jogadores.size())
+    );
+
+    mergeSort(metadeEsquerda);
+    mergeSort(metadeDireita);
+
+    merge(jogadores, metadeEsquerda, metadeDireita);
   }
 
-  public static int compareJogadores(Jogador jogador1, Jogador jogador2) {
-    comparacoes++;
-    int compareAno = jogador1
-      .getAnoNascimento()
-      .compareTo(jogador2.getAnoNascimento());
-    if (compareAno != 0) {
-      return compareAno;
+  public static void merge(
+    List<Jogador> resultado,
+    List<Jogador> esquerda,
+    List<Jogador> direita
+  ) {
+    int i = 0, j = 0, k = 0;
+
+    while (i < esquerda.size() && j < direita.size()) {
+      int comparacao = esquerda
+        .get(i)
+        .getUniversidade()
+        .compareTo(direita.get(j).getUniversidade());
+
+      if (
+        comparacao < 0 ||
+        (
+          comparacao == 0 &&
+          esquerda.get(i).getNome().compareTo(direita.get(j).getNome()) <= 0
+        )
+      ) {
+        resultado.set(k++, esquerda.get(i++));
+        comparacao++;
+      } else {
+        resultado.set(k++, direita.get(j++));
+      }
     }
-    return jogador1.getNome().compareTo(jogador2.getNome());
+
+    while (i < esquerda.size()) {
+      resultado.set(k++, esquerda.get(i++));
+    }
+
+    while (j < direita.size()) {
+      resultado.set(k++, direita.get(j++));
+    }
   }
 
   public static void main(String[] args) {
@@ -196,9 +222,9 @@ public class Jogador {
 
       // Magia da ordenação
 
-      List<Jogador> jogadoresOrdenados = insertionSort(jogadoresInseridos);
+      mergeSort(jogadoresInseridos);
 
-      for (Jogador jogador : jogadoresOrdenados) {
+      for (Jogador jogador : jogadoresInseridos) {
         System.out.println(
           "[" +
           jogador.getId() +
@@ -222,10 +248,12 @@ public class Jogador {
 
       sc.close();
 
-      FileWriter myWriter = new FileWriter("matricula_insercao.txt");
+      FileWriter myWriter = new FileWriter("matricula_mergesort.txt");
       long tempoFinal = System.currentTimeMillis();
       long duracao = tempoFinal - tempoInicial;
-      myWriter.write("805688" + "\t" + comparacoes + "\t" + trocas + "\t" + duracao + "ms");
+      myWriter.write(
+        "805688" + "\t" + comparacoes + "\t" + trocas + "\t" + duracao + "ms"
+      );
       myWriter.close();
     } catch (IOException e) {
       e.printStackTrace();

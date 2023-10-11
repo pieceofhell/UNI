@@ -17,6 +17,7 @@ public class Jogador {
   private String cidadeNascimento;
   private String estadoNascimento;
   public static int comparacoes;
+  public static int trocas;
 
   public int getId() {
     return id;
@@ -142,7 +143,7 @@ public class Jogador {
     return omegaJogadores;
   }
 
-  public static List<Jogador> insertionSort(List<Jogador> jogadoresOrdenados) {
+  public static List<Jogador> selectionSort(List<Jogador> jogadoresOrdenados) {
     int n = jogadoresOrdenados.size();
     for (int i = 0; i < n - 1; i++) {
       int minIndex = i;
@@ -162,6 +163,7 @@ public class Jogador {
       Jogador temp = jogadoresOrdenados.get(i);
       jogadoresOrdenados.set(i, jogadoresOrdenados.get(minIndex));
       jogadoresOrdenados.set(minIndex, temp);
+      trocas++;
     }
     return jogadoresOrdenados;
   }
@@ -169,7 +171,7 @@ public class Jogador {
   public static void main(String[] args) {
     long tempoInicial = System.currentTimeMillis();
 
-    String arq = "players.csv";
+    String arq = "/tmp/players.csv";
     try {
       List<Jogador> omegaJogadores = Jogador.ler(arq);
 
@@ -192,7 +194,7 @@ public class Jogador {
 
       // Magia da ordenação
 
-      List<Jogador> jogadoresOrdenados = insertionSort(jogadoresInseridos);
+      List<Jogador> jogadoresOrdenados = selectionSort(jogadoresInseridos);
 
       for (Jogador jogador : jogadoresOrdenados) {
         System.out.println(
@@ -221,7 +223,7 @@ public class Jogador {
       FileWriter myWriter = new FileWriter("matricula_selecao.txt");
       long tempoFinal = System.currentTimeMillis();
       long duracao = tempoFinal - tempoInicial;
-      myWriter.write("805688" + "\t" + duracao + "ms" + "\t" + comparacoes);
+      myWriter.write("805688" + "\t" + comparacoes + "\t" + trocas + "\t" + duracao + "ms");
       myWriter.close();
     } catch (IOException e) {
       e.printStackTrace();

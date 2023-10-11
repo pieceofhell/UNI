@@ -17,6 +17,7 @@ public class Jogador {
   private String cidadeNascimento;
   private String estadoNascimento;
   public static int comparacoes;
+  public static int trocas;
 
   public int getId() {
     return id;
@@ -156,7 +157,7 @@ public class Jogador {
       Jogador temp = jogadores.get(0);
       jogadores.set(0, jogadores.get(i));
       jogadores.set(i, temp);
-
+      trocas++;
       // Chamar heapify na heap reduzida
       heapify(jogadores, i, 0);
     }
@@ -217,7 +218,7 @@ public class Jogador {
   public static void main(String[] args) {
     long tempoInicial = System.currentTimeMillis();
 
-    String arq = "players.csv";
+    String arq = "/tmp/players.csv";
     try {
       List<Jogador> omegaJogadores = Jogador.ler(arq);
 
@@ -269,7 +270,7 @@ public class Jogador {
       FileWriter myWriter = new FileWriter("matricula_heapsort.txt");
       long tempoFinal = System.currentTimeMillis();
       long duracao = tempoFinal - tempoInicial;
-      myWriter.write("805688" + "\t" + duracao + "ms" + "\t" + comparacoes);
+      myWriter.write("805688" + "\t" + comparacoes + "\t" + trocas + "\t" + duracao + "ms");
       myWriter.close();
     } catch (IOException e) {
       e.printStackTrace();

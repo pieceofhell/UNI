@@ -17,6 +17,7 @@ public class Jogador {
   private String cidadeNascimento;
   private String estadoNascimento;
   public static int comparacoes;
+  public static int trocas;
 
   public int getId() {
     return id;
@@ -192,6 +193,8 @@ public class Jogador {
             Jogador temp = jogadores.get(j);
             jogadores.set(j, jogadores.get(j + 1));
             jogadores.set(j + 1, temp);
+            comparacoes++;
+            trocas++;
           }
           j--;
         }
@@ -213,7 +216,7 @@ public class Jogador {
   public static void main(String[] args) {
     long tempoInicial = System.currentTimeMillis();
 
-    String arq = "players.csv";
+    String arq = "/tmp/players.csv";
     try {
       List<Jogador> omegaJogadores = Jogador.ler(arq);
 
@@ -265,7 +268,7 @@ public class Jogador {
       FileWriter myWriter = new FileWriter("matricula_countingsort.txt");
       long tempoFinal = System.currentTimeMillis();
       long duracao = tempoFinal - tempoInicial;
-      myWriter.write("805688" + "\t" + duracao + "ms" + "\t" + comparacoes);
+      myWriter.write("805688" + "\t" + comparacoes + "\t" + trocas + "\t" + duracao + "ms");
       myWriter.close();
     } catch (IOException e) {
       e.printStackTrace();
