@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+int comparacoes = 0;
+int trocas = 0;
 
 struct Jogador
 {
@@ -43,11 +46,10 @@ void ler(const char *nomeArquivo, struct Jogador jogadores[], int tamanho)
 
     while (fgets(linha, sizeof(linha), arquivo) != NULL && indice < tamanho)
     {
-        removerQuebraDeLinha(linha); // Remove quebra de linha e retorno de carro
+        removerQuebraDeLinha(linha);
 
         struct Jogador *jogador = &jogadores[indice];
 
-        // Use strtok para dividir a linha em campos separados por vírgulas
         char *token = strtok(linha, ",");
         if (token != NULL)
         {
@@ -96,7 +98,6 @@ void ler(const char *nomeArquivo, struct Jogador jogadores[], int tamanho)
             strncpy(jogador->estadoNascimento, token, sizeof(jogador->estadoNascimento));
         }
 
-        // Preencha os campos ausentes com "nao informado" se necessário
         if (strlen(jogador->anoNascimento) == 0)
         {
             strcpy(jogador->anoNascimento, "nao informado");
@@ -123,32 +124,9 @@ void ler(const char *nomeArquivo, struct Jogador jogadores[], int tamanho)
     fclose(arquivo);
 }
 
-void adicionarJogadorPorID(int id, struct Jogador jogadores[], int tamanho, struct Jogador jogadoresSelecionados[], int *contadorSelecionados)
+void adicionarJogadoresPorID(struct Jogador jogadores[], int tamanhoJogadores, struct Jogador jogadoresSelecionados[], int *contadorSelecionados)
 {
-    for (int i = 0; i < tamanho; i++)
-    {
-        if (jogadores[i].id == id)
-        {
-            jogadoresSelecionados[*contadorSelecionados] = jogadores[i];
-            (*contadorSelecionados)++;
-            return;
-        }
-    }
-    printf("Jogador %d nao encontrado.\n", id);
-}
-
-int main()
-{
-    struct Jogador jogadores[4000];
-    int tamanhoJogadores = 4000;
-
-    ler("/tmp/players.csv", jogadores, tamanhoJogadores);
-
-    struct Jogador jogadoresSelecionados[500];
-    int contadorSelecionados = 0;
-
-    int id;
-    char entrada[500];
+    char entrada[100];
 
     while (1)
     {
@@ -162,9 +140,93 @@ int main()
             break;
         }
 
-        id = atoi(entrada);
-        adicionarJogadorPorID(id, jogadores, tamanhoJogadores, jogadoresSelecionados, &contadorSelecionados);
+        int id = atoi(entrada);
+        if (id < 0 || id >= tamanhoJogadores)
+        {
+            printf("ID %d nao encontrado.\n", id);
+        }
+        else
+        {
+
+            jogadoresSelecionados[*contadorSelecionados] = jogadores[id];
+            (*contadorSelecionados)++;
+        }
     }
+}
+
+int comparaJogadores(const void *a, const void *b);
+void quickSort(struct Jogador jogadores[], int esquerda, int direita);
+int particionar(struct Jogador jogadores[], int esquerda, int direita);
+void trocarJogadores(struct Jogador *a, struct Jogador *b);
+
+int comparaJogadores(const void *a, const void *b)
+{
+    struct Jogador *jogadorA = (struct Jogador *)a;
+    struct Jogador *jogadorB = (struct Jogador *)b;
+
+    int comparacaoEstado = strcmp(jogadorA->estadoNascimento, jogadorB->estadoNascimento);
+
+    if (comparacaoEstado != 0)
+    {
+        return comparacaoEstado;
+    }
+
+    return strcmp(jogadorA->nome, jogadorB->nome);
+}
+
+void quickSort(struct Jogador jogadores[], int esquerda, int direita)
+{
+    if (esquerda < direita)
+    {
+        int indicePivo = particionar(jogadores, esquerda, direita);
+        quickSort(jogadores, esquerda, indicePivo - 1);
+        quickSort(jogadores, indicePivo + 1, direita);
+    }
+}
+
+int particionar(struct Jogador jogadores[], int esquerda, int direita)
+{
+    struct Jogador pivo = jogadores[direita];
+    int i = esquerda - 1;
+
+    for (int j = esquerda; j < direita; j++)
+    {
+        if (comparaJogadores(&jogadores[j], &pivo) <= 0)
+        {
+            i++;
+            trocarJogadores(&jogadores[i], &jogadores[j]);
+        }
+    }
+
+    trocarJogadores(&jogadores[i + 1], &jogadores[direita]);
+    return i + 1;
+}
+
+void trocarJogadores(struct Jogador *a, struct Jogador *b)
+{
+    struct Jogador temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int main()
+{
+    FILE *fptr;
+    clock_t inicio = clock();
+    fptr = fopen("matricula_quicksort.txt", "w");
+    struct Jogador jogadores[4000];
+    int tamanhoJogadores = 4000;
+
+    ler("/tmp/players.csv", jogadores, tamanhoJogadores);
+
+    struct Jogador jogadoresSelecionados[500];
+    int contadorSelecionados = 0;
+
+    int id;
+    char entrada[500];
+
+    adicionarJogadoresPorID(jogadores, tamanhoJogadores, jogadoresSelecionados, &contadorSelecionados);
+    quickSort(jogadoresSelecionados, 0, contadorSelecionados - 1);
 
     char newline = '\n';
     for (int i = 0; i < contadorSelecionados; i++)
@@ -174,6 +236,9 @@ int main()
                jogadoresSelecionados[i].peso, jogadoresSelecionados[i].anoNascimento, jogadoresSelecionados[i].universidade,
                jogadoresSelecionados[i].cidadeNascimento, jogadoresSelecionados[i].estadoNascimento, newline);
     }
-
+    clock_t fim = clock();
+    double tempoGasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    fprintf(fptr, "805688\t%d\t%d\t%.lfms", comparacoes, trocas, tempoGasto);
+    fclose(fptr);
     return 0;
 }
