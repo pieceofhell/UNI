@@ -1,18 +1,18 @@
-public class Fila {
+public class Pilha {
 
   private Cell first;
   private Cell last;
 
-  public Fila() {
+  public Pilha() {
     first = new Cell();
     last = first;
   }
 
-  public void insert(int x) {
-    Cell tmp = new Cell(x);
-    last.next = tmp;
-    last = tmp;
-  }
+  // public void insert(int x) {
+  //   Cell tmp = new Cell(x);
+  //   last.next = tmp;
+  //   last = tmp;
+  // }
 
   public void insertPos(int x, int n) {
     Cell tmp = new Cell(x);
