@@ -3,6 +3,7 @@ import numpy as np
 import pyautogui
 import time
 
+
 # Function to locate a template image within a target image at multiple scales
 def find_template(template_path, target_path):
     # Read the template and target images
@@ -26,12 +27,20 @@ def find_template(template_path, target_path):
 
         # Add the match locations at the current scale to the list
         for pt in zip(*loc[::-1]):
-            match_locations.append((pt[0], pt[1], int(resized_template.shape[1]), int(resized_template.shape[0])))
+            match_locations.append(
+                (
+                    pt[0],
+                    pt[1],
+                    int(resized_template.shape[1]),
+                    int(resized_template.shape[0]),
+                )
+            )
 
     return match_locations
 
+
 # Specify the path to the template image you want to locate
-template_path = "tirarFoto.png"
+template_path = "test/tirarFoto.png"
 
 while True:
     # Take a screenshot of the main monitor
@@ -41,7 +50,7 @@ while True:
     screenshot = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2GRAY)
 
     # Save the screenshot to a file
-    screenshot_path = "screenshot.png"
+    screenshot_path = "test/screenshot.png"
     cv2.imwrite(screenshot_path, screenshot)
 
     # Find the template in the screenshot at multiple scales
@@ -54,4 +63,4 @@ while True:
         print("Template not found on the screen!")
 
     # Wait for a few seconds before taking the next screenshot
-    time.sleep(1)  # Adjust the interval as needed
+    time.sleep(2)  # Adjust the interval as needed
