@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Jogador {
@@ -94,17 +92,18 @@ public class Jogador {
     return novo;
   }
 
-  public static Jogador encontrarPorId(List<Jogador> jogadores, int id) {
+  public static Jogador encontrarPorId(Jogador[] jogadores, int id) {
     for (Jogador jogador : jogadores) {
-      if (jogador.getId() == id) {
+      if (jogador != null && jogador.getId() == id) {
         return jogador;
       }
     }
     return null;
   }
 
-  public static List<Jogador> ler(String arq) throws IOException {
-    List<Jogador> allJogadores = new ArrayList<>();
+  public static Jogador[] ler(String arq) throws IOException {
+    Jogador[] allJogadores = new Jogador[4000];
+    int currentIndex = 0;
 
     try (BufferedReader br = new BufferedReader(new FileReader(arq))) {
       String linha;
@@ -135,65 +134,91 @@ public class Jogador {
           dados.length > 7 && !dados[7].isEmpty() ? dados[7] : "nao informado"
         );
 
-        allJogadores.add(jogador);
+        allJogadores[currentIndex] = jogador;
+        currentIndex++;
       }
     }
     return allJogadores;
   }
 
-  private static List<Jogador> jogadoresSelecionados = new ArrayList<>();
+  private static Jogador[] jogadoresSelecionados = new Jogador[3923];
 
   public static void inserirInicio(Jogador jogador) {
     if (jogador != null) {
-      jogadoresSelecionados.add(0, jogador);
+      for (int i = jogadoresSelecionados.length - 1; i > 0; i--) {
+        jogadoresSelecionados[i] = jogadoresSelecionados[i - 1];
+      }
+      jogadoresSelecionados[0] = jogador;
     }
   }
 
   public static void inserirFim(Jogador jogador) {
     if (jogador != null) {
-      jogadoresSelecionados.add(jogador);
+      for (int i = 0; i < jogadoresSelecionados.length; i++) {
+        if (jogadoresSelecionados[i] == null) {
+          jogadoresSelecionados[i] = jogador;
+          break;
+        }
+      }
     }
   }
 
   public static void inserir(int pos, Jogador jogador) {
-    if (jogador != null && pos >= 0 && pos <= jogadoresSelecionados.size()) {
-      jogadoresSelecionados.add(pos, jogador);
+    if (jogador != null && pos >= 0 && pos < jogadoresSelecionados.length) {
+      for (int i = jogadoresSelecionados.length - 1; i > pos; i--) {
+        jogadoresSelecionados[i] = jogadoresSelecionados[i - 1];
+      }
+      jogadoresSelecionados[pos] = jogador;
     }
   }
 
   public static Jogador removerInicio() {
-    if (!jogadoresSelecionados.isEmpty()) {
-      System.out.println(
-        "(R) " + jogadoresSelecionados.get(0).getNome());
-      return jogadoresSelecionados.remove(0);
+    if (jogadoresSelecionados[0] != null) {
+      Jogador removido = jogadoresSelecionados[0];
+      for (int i = 0; i < jogadoresSelecionados.length - 1; i++) {
+        jogadoresSelecionados[i] = jogadoresSelecionados[i + 1];
+      }
+      jogadoresSelecionados[jogadoresSelecionados.length - 1] = null;
+      System.out.println("(R) " + removido.getNome());
+      return removido;
     }
     return null;
   }
 
   public static Jogador removerFim() {
-    if (!jogadoresSelecionados.isEmpty()) {
-      System.out.println(
-        "(R) " +
-        jogadoresSelecionados.get(jogadoresSelecionados.size() - 1).getNome()
-      );
-      return jogadoresSelecionados.remove(jogadoresSelecionados.size() - 1);
+    for (int i = jogadoresSelecionados.length - 1; i >= 0; i--) {
+      if (jogadoresSelecionados[i] != null) {
+        Jogador removido = jogadoresSelecionados[i];
+        jogadoresSelecionados[i] = null;
+        System.out.println("(R) " + removido.getNome());
+        return removido;
+      }
     }
     return null;
   }
 
   public static Jogador remover(int pos) {
-    if (pos >= 0 && pos < jogadoresSelecionados.size()) {
-      System.out.println("(R) " + jogadoresSelecionados.get(pos).getNome());
-      return jogadoresSelecionados.remove(pos);
+    if (
+      pos >= 0 &&
+      pos < jogadoresSelecionados.length &&
+      jogadoresSelecionados[pos] != null
+    ) {
+      Jogador removido = jogadoresSelecionados[pos];
+      for (int i = pos; i < jogadoresSelecionados.length - 1; i++) {
+        jogadoresSelecionados[i] = jogadoresSelecionados[i + 1];
+      }
+      jogadoresSelecionados[jogadoresSelecionados.length - 1] = null;
+      System.out.println("(R) " + removido.getNome());
+      return removido;
     }
     return null;
   }
 
   public static void main(String[] args) {
-    String arq = "players.csv";
+    String arq = "/tmp/players.csv";
 
     try {
-      List<Jogador> omegaJogadores = Jogador.ler(arq);
+      Jogador[] omegaJogadores = Jogador.ler(arq);
       Scanner sc = new Scanner(System.in);
 
       while (true) {
@@ -212,14 +237,12 @@ public class Jogador {
 
       // PARTE 2 DO EXERCICIO (MANIPULACAO DA LISTA DE JOGADORES)
 
-      while (true) {
+      int numeroOperacoes = Integer.parseInt(sc.nextLine());
+
+      for (int i = 0; i < numeroOperacoes; i++) {
         String in = sc.nextLine();
 
-        if (in == null) {
-          break;
-        }
-
-        if (in.equals("FIM")) {
+        if (in.equals("FIM") || in.equals("fim") || in == null) {
           break;
         }
 
@@ -259,28 +282,30 @@ public class Jogador {
         }
       }
 
-      for (int i = 0; i < jogadoresSelecionados.size(); i++) {
-        Jogador jogador = jogadoresSelecionados.get(i);
-        System.out.println(
-          "[" +
-          i +
-          "]" +
-          " ## " +
-          jogador.getNome() +
-          " ## " +
-          jogador.getAltura() +
-          " ## " +
-          jogador.getPeso() +
-          " ## " +
-          jogador.getAnoNascimento() +
-          " ## " +
-          jogador.getUniversidade() +
-          " ## " +
-          jogador.getCidadeNascimento() +
-          " ## " +
-          jogador.getEstadoNascimento() +
-          "]"
-        );
+      for (int i = 0; i < jogadoresSelecionados.length; i++) {
+        Jogador jogador = jogadoresSelecionados[i];
+        if (jogador != null) {
+          System.out.println(
+            "[" +
+            i +
+            "]" +
+            " ## " +
+            jogador.getNome() +
+            " ## " +
+            jogador.getAltura() +
+            " ## " +
+            jogador.getPeso() +
+            " ## " +
+            jogador.getAnoNascimento() +
+            " ## " +
+            jogador.getUniversidade() +
+            " ## " +
+            jogador.getCidadeNascimento() +
+            " ## " +
+            jogador.getEstadoNascimento() +
+            " ##"
+          );
+        }
       }
 
       sc.close();
