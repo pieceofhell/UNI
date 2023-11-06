@@ -4,6 +4,8 @@ import pyautogui
 import time
 import re
 
+start_time = time.time()
+
 # Define the coordinates of the top-left and bottom-right corners of the region to capture
 x1, y1 = 740, 400  # Top-left corner
 x2, y2 = 1180, 900  # Bottom-right corner
@@ -24,15 +26,17 @@ while True:
         processedText = "".join([char.lower() for char in rawText if char != " "])
 
         cleanText = re.sub(r"[^a-zA-Z0-9]", "", processedText)
+        substring0 = "biometria"
         substring1 = "tirarfoto"
         substring2 = "tirar"
         substring3 = "foto"
         substring4 = "tiraroutra"
-        substring5 = "enviar"        
+        substring5 = "enviar"
         substring6 = "outra"
 
         if (
-            substring1 in cleanText
+            substring0 in cleanText
+            or substring1 in cleanText
             or substring2 in cleanText
             or substring3 in cleanText
             or substring4 in cleanText
@@ -52,7 +56,11 @@ while True:
             isPictureTaken = True
             pyautogui.click(955, 780)
 
-            if substring4 in cleanText or substring5 in cleanText or substring6 in cleanText:
+            if (
+                substring4 in cleanText
+                or substring5 in cleanText
+                or substring6 in cleanText
+            ):
                 print("SECOND SUBSTRING FOUND!")
                 time.sleep(2)
                 # pyautogui.click(955, 780)
@@ -60,7 +68,6 @@ while True:
                 time.sleep(2)
                 print("PROCESS COMPLETE!")
                 time.sleep(2)
-                break
                 # Upon taking the picture, perform a mouse
                 # click at the calculated coordinates
             else:
@@ -69,7 +76,9 @@ while True:
             print("SUBSTRING NOT FOUND.")
             isPictureTaken = False
 
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    # the following piece of code treats the KeyboardInterrupt exception and prints that the program has been succesfully stopped
 
-    time.sleep(1)  # Adjust the interval as needed
+    except KeyboardInterrupt as e:
+        print("--- %s seconds ---" % (time.time() - start_time))
+
+    time.sleep(5)  # Adjust the interval as needed
