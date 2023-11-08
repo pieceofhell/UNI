@@ -127,15 +127,13 @@ class Lista {
     ultimo = null;
   }
 
-  public Jogador encontrarPorId(int id) {
-    for (Jogador jogador = primeiro; jogador != null; jogador = jogador.prox) {
-      int idAvaliado = jogador.getId();
-      if (idAvaliado == id) {
-        System.out.println("Jogador encontrado! " + jogador.getNome());
-        return jogador;
-      }
-    }
-    return null;
+  public Lista encontrarPorId(Lista omegaJogadores, Lista jogadoresTratados, int id) {
+    for (Jogador i = omegaJogadores.primeiro; i != null; i = i.prox) {
+          if (i.getId() == id) {
+            jogadoresTratados.inserirFim(i);
+          }
+        }
+    return jogadoresTratados;
   }
 
   public Lista ler(String arq) throws IOException {
@@ -402,13 +400,17 @@ class Principal {
 
         int id = Integer.parseInt(entrada);
 
+        jogadoresSelecionados = jogadoresSelecionados.encontrarPorId(omegaJogadores, jogadoresSelecionados, id);
+
         // Jogador jogador = omegaJogadores.encontrarPorId(id);
 
-        for (Jogador i = omegaJogadores.primeiro; i != null; i = i.prox) {
-          if (i.getId() == id) {
-            jogadoresSelecionados.inserirFim(i);
-          }
-        }
+        // Pequeno método de inserção de jogadoresSelecionados que funciona garantidamente.
+
+        // for (Jogador i = omegaJogadores.primeiro; i != null; i = i.prox) {
+        //   if (i.getId() == id) {
+        //     jogadoresSelecionados.inserirFim(i);
+        //   }
+        // }
       }      
 
       // PARTE 2 DO EXERCICIO (MANIPULACAO DA LISTA DE JOGADORES)
