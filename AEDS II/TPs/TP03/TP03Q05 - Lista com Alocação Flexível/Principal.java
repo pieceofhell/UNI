@@ -79,7 +79,7 @@ class Jogador {
     this.estadoNascimento = estadoNascimento;
   }
 
-  public Jogador clone() throws CloneNotSupportedException {
+  public Jogador clone() {
     Jogador novo = new Jogador();
     novo.id = this.id;
     novo.nome = this.nome;
@@ -136,6 +136,15 @@ class Lista {
     return jogadoresTratados;
   }
 
+  public Jogador encontrarPorId(Lista jogadoresTratados, int id) {
+    for (Jogador i = jogadoresTratados.primeiro; i != jogadoresTratados.ultimo.prox; i = i.prox) {
+          if (i.getId() == id) {
+            return i;
+          }
+        }
+    return null;
+  }
+
   public Lista ler(String arq) throws IOException {
     Lista allJogadores = new Lista();
 
@@ -182,14 +191,24 @@ class Lista {
     return allJogadores;
   }
 
-  public void inserirInicio(Jogador jogador) {
-    Jogador tmp = jogador;
-    tmp.prox = primeiro.prox;
-    primeiro.prox = tmp;
-    if (primeiro == ultimo) {
-      ultimo = tmp;
+  public void inserirInicio(Lista jogadores, Jogador jogador) {
+    Jogador tmp = jogador.clone();
+    tmp.prox = primeiro;
+    primeiro = tmp;
+    if (primeiro.prox == null) {
+      ultimo = primeiro;
     }
-    tmp = null;
+  }
+
+  // Método de inserir início somente com parâmetro do jogador passado (que é o que vai ser inserido)
+
+  public void inserirInicio(Jogador jogador) {
+    Jogador tmp = jogador.clone();
+    tmp.prox = primeiro;
+    primeiro = tmp;
+    if (primeiro.prox == null) {
+      ultimo = primeiro;
+    }
   }
 
   public void inserirFim(Jogador jogador) {
@@ -266,14 +285,18 @@ class Lista {
     }
   }
 
-  public Jogador remover(Lista jogadores, int pos) throws Exception {
+  public Jogador remover(Lista jogadores, int pos) {
     int tamanho = tamanhoLista(jogadores);
 
     if (primeiro == ultimo) {
-      throw new Exception("Erro ao remover (vazia)!");
+      System.out.println("Erro ao remover (vazia)!");      
     } else if (pos < 0 || pos >= tamanho) {
-      throw new Exception(
-        "Erro ao remover (posicao " + pos + " / " + tamanho + " invalida!"
+      System.out.println(
+        "Erro ao remover (posicao " +
+        pos +
+        " / " +
+        tamanho +
+        " invalida!"
       );
     }
 
@@ -402,7 +425,7 @@ class Principal {
 
         jogadoresSelecionados = jogadoresSelecionados.encontrarPorId(omegaJogadores, jogadoresSelecionados, id);
 
-        // Jogador jogador = omegaJogadores.encontrarPorId(id);
+        // Jogador jogador = omegaJogadores.encontrarPorId(jogadoresSelecionados, id);
 
         // Pequeno método de inserção de jogadoresSelecionados que funciona garantidamente.
 
@@ -420,10 +443,6 @@ class Principal {
       for (int i = 0; i < numeroOperacoes; i++) {
         String in = sc.nextLine();
 
-        if (in.equals("FIM") || in.equals("fim") || in == null) {
-          break;
-        }
-
         String[] entrada = in.split(" ");
 
         if (entrada.length == 1) {
@@ -435,26 +454,26 @@ class Principal {
           }
         }
 
-        // if (entrada.length == 2) {
-        //   String comando = entrada[0];
-        //   int param = Integer.parseInt(entrada[1]);
-        //   if (comando.equals("II")) {
-        //     Jogador jogador = Jogador.encontrarPorId(omegaJogadores, param);
-        //     inserirInicio(jogador);
-        //   } else if (comando.equals("IF")) {
-        //     Jogador jogador = Jogador.encontrarPorId(omegaJogadores, param);
-        //     inserirFim(jogador);
-        //   } else if (comando.equals("R*")) {
-        //     remover(param);
-        //   }
-        // }
+        if (entrada.length == 2) {
+          String comando = entrada[0];
+          int param = Integer.parseInt(entrada[1]);
+          if (comando.equals("II")) {
+            Jogador jogador = jogadoresSelecionados.encontrarPorId(jogadoresSelecionados, param);
+            jogadoresSelecionados.inserirInicio(jogadoresSelecionados, jogador);
+          } else if (comando.equals("IF")) {
+            Jogador jogador = jogadoresSelecionados.encontrarPorId(jogadoresSelecionados, param);
+            jogadoresSelecionados.inserirFim(jogador);
+          } else if (comando.equals("R*")) {
+            jogadoresSelecionados.remover(jogadoresSelecionados, param);
+          }
+        }
 
         // if (entrada.length == 3) {
         //   String comando = entrada[0];
         //   int param1 = Integer.parseInt(entrada[1]);
         //   int param2 = Integer.parseInt(entrada[2]);
         //   if (comando.equals("I*")) {
-        //     Jogador jogador = Jogador.encontrarPorId(omegaJogadores, param2);
+        //     Jogador jogador = Jogador.encontrarPorId(jogadoresSelecionados, param2);
         //     jogadoresSelecionados.inserir(jogadoresSelecionados, param1, jogador);
         //   }
         // }
