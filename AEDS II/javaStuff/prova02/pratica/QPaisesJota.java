@@ -18,7 +18,7 @@ class Pais {
   }
 }
 
-public class QPaises {
+public class QPaisesJota {
 
   public static ArrayList<Pais> sort(Pais[] paises) {
     ArrayList<Pais> paisesOrdenados = new ArrayList<Pais>();
