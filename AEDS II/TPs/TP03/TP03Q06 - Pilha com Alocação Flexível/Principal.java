@@ -254,11 +254,11 @@ class Lista {
 
     if (pos < 0 || pos > tamanho) {
       System.out.println(
-        "Erro ao inserir posição (" +
+        "Erro ao inserir posicao (" +
         pos +
         " / tamanho = " +
         tamanho +
-        ") inválida!"
+        ") invalida!"
       );
       return;
     }
@@ -436,7 +436,7 @@ public class Principal {
 
         if (entrada.length == 1) {
           String comando = entrada[0];
-          if (comando.equals("RI")) {
+          if (comando.equals("R")) {
             jogadoresSelecionados.removerInicio();
           } else if (comando.equals("RF")) {
             jogadoresSelecionados.removerFim();
@@ -446,7 +446,7 @@ public class Principal {
         if (entrada.length == 2) {
           String comando = entrada[0];
           int param = Integer.parseInt(entrada[1]);
-          if (comando.equals("II")) {
+          if (comando.equals("I")) {
             Jogador jogador = jogadoresSelecionados.encontrarPorId(
               omegaJogadores,
               param
