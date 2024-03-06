@@ -10,42 +10,20 @@ class Player {
 
   /**
    * Uses cigarette (heals 1 HP per smoked fag)
-   * @param player
    */
 
-  public static void useCigarette(Player player) {
-    player.hp++;
+  public void useCigarette() {
+    if (hp <= 5) {
+      hp++;
+    }
   }
 
-  /**
-   * Uses Hand Saw (makes the next live bullet deal 2 DMG)
-   * @param weapon
-   */
-
-  public static void useHandSaw(Shotgun weapon) {
-    weapon.isSawed = true;
-  }
-
-  /**
-   * Uses Beer (skips the currently loaded bullet)
-   * @param weapon
-   */
-
-  public static void useBeer(Shotgun weapon) {
-    System.out.println("Skipped bullet was: " + weapon.shotgun.pop());
-  }
-
-  /**
-   * Uses magnifying glass (allows player to see currently loaded bullet)
-   * @param weapon
-   */
-
-  public static void useMagnifyingGlass(Shotgun weapon) {
-    System.out.println("Currently loaded bullet is: " + weapon.shotgun.peek());
+  public void displayLives() {
+    System.out.println("HP: " + hp);
   }
 
   public Player() {
-    hp = 3;
+    hp = 6;
     items = 0;
     round = 1;
   }
@@ -57,10 +35,12 @@ class Player {
 
 class Shotgun {
 
-  Stack<Integer> shotgun;
-  int[] shotgunArray;
-  int size;
-  boolean isSawed;
+  private Stack<Integer> shotgun;
+  private int[] shotgunArray;
+  private int size;
+
+  @SuppressWarnings("unused")
+  private boolean isSawed;
 
   /**
    * Generates a random number between 2 and 8 (number of shells in the shotgun).
@@ -77,7 +57,7 @@ class Shotgun {
    * @see https://google.com
    */
 
-   public static int controlledRandomGen() {
+  public int controlledRandomGen() {
     return (int) (Math.random() * 9) + 3;
   }
 
@@ -85,7 +65,7 @@ class Shotgun {
    * Generates a random number between 0 and 1 (live or blank bullet).
    * @return 0 or 1 integer value
    */
-  public static int bulletGen() {
+  public int bulletGen() {
     // Generate a random floating-point number between 0 (inclusive) and 1 (exclusive)
     double randomValue = Math.random();
 
@@ -95,114 +75,135 @@ class Shotgun {
     return result;
   }
 
-  /**  Future function that will be worked on where the bullets generated MUST have a defined proportion of live and blank bullets.
+  /** Checks if the bullets generated are badly seeded. If they are, the stack is restructured to have a more defined proportion between the number of live and blank bullets.
    * @return 0 or 1 integer value
    */
 
-  public static int[] controlledBulletGen(int size) {
-    int[] result = new int[size];
-    int lives = size / 2;
+  public void controlledBulletGen() {
+    int lives = countLives(), diff = 0;
     int blanks = size - lives;
+    if (lives > blanks) diff = lives - blanks; else if (lives < blanks) diff =
+      blanks - lives;
+    System.out.println("Difference is: " + diff);
 
-    return result;
+    if (diff > 2) {
+      System.out.println("Bad Seed Detected! Reloading...");
+      // Calculate the number of 0s and 1s needed for a better seed
+      int targetZeros = (shotgun.size() + 2) / 2;
+      int targetOnes = shotgun.size() - targetZeros;
+
+      // Re-seed the shotgun with the required number of 0s and 1s
+      shotgun.clear();
+
+      for (int i = 0; i < targetZeros; i++) {
+        shotgun.push(0);
+      }
+
+      for (int i = 0; i < targetOnes; i++) {
+        shotgun.push(1);
+      }
+
+      Collections.shuffle(shotgun);
+    }
   }
 
   /**
    * Loads the shotgun with the bullets being generated and pushes them into the stack.
-   * @param stack
    * @param size
    */
 
-  public static void loadShotgun(Stack<Integer> stack, int size) {
+  public void loadShotgun(int size) {
     for (int i = 0; i < size; i++) {
-      stack.push(bulletGen());
+      shotgun.push(bulletGen());
     }
   }
 
   /**
    * Loads the shotgun with the bullets being generated and pushes them into the array.
-   * @param array
    */
 
-  public static void loadShotgun(int[] array) {
-    for (int i = 0; i < array.length; i++) {
-      array[i] = bulletGen();
+  public void loadShotgun() {
+    for (int i = 0; i < shotgunArray.length; i++) {
+      shotgunArray[i] = bulletGen();
     }
   }
 
   /**
    * Reloads the shotgun due to a bad seed being generated (all blanks/lives in the stack).
-   * @param stack
-   * @param size
    */
 
-  public static void reloadShotgun(Stack<Integer> stack) {
-    stack.clear();
+  public void reloadShotgunSt() {
+    shotgun.clear();
     int size = randomGen();
     for (int i = 0; i < size; i++) {
-      stack.push(bulletGen());
+      shotgun.push(bulletGen());
     }
   }
 
   /**
    * Reloads the shotgun due to a bad seed being generated (all blanks/lives in the array).
-   * @param array
    */
 
-  public static void reloadShotgun(int[] array) {
-    for (int i = 0; i < array.length; i++) {
-      array[i] = bulletGen();
+  public void reloadShotgunAr() {
+    for (int i = 0; i < shotgunArray.length; i++) {
+      shotgunArray[i] = bulletGen();
     }
   }
 
-  /**
-   * Counts the number of live and blank bullets in the shotgun stack.
-   * @param stack
-   */
-
-  public static void countBullets(Stack<Integer> stack) {
-    int bullets = stack.size(), lives = 0, blanks = 0;
-
-    // Create a copy of the stack to iterate over without modifying the original
-    for (int i = stack.size() - 1; i >= 0; i--) {
-      int bullet = stack.get(i);
-      System.out.println(bullet);
+  public int countBlanks() {
+    int blanks = 0;
+    for (int i = shotgun.size() - 1; i >= 0; i--) {
+      int bullet = shotgun.get(i);
       if (bullet == 0) {
         blanks++;
       }
     }
+    return blanks;
+  }
+
+  public int countLives() {
+    int lives = 0;
+    lives = shotgun.size() - countBlanks();
+    return lives;
+  }
+
+  /**
+   * Counts the number of live and blank bullets in the shotgun stack and prints it.
+   */
+
+  public void displayBulletsSt() {
+    int bullets = shotgun.size(), lives = 0, blanks = 0;
+
+    // Create a copy of the stack to iterate over without modifying the original
+    blanks = countBlanks();
 
     lives = bullets - blanks;
+
     System.out.println(lives + " LIVE(S)\t" + blanks + " BLANK(S)");
   }
 
   /**
-   * Counts the number of live and blank bullets in the shotgun array.
-   * @param array
+   * Counts the number of live and blank bullets in the shotgun array and prints it.
    */
 
-  public static void countBullets(int[] array) {
-    int bullets = array.length, lives = 0, blanks = 0;
+  public void displayBulletsAr() {
+    int bullets = shotgunArray.length, lives = 0;
+    long blanks = 0;
 
-    for (int bullet : array) {
-      if (bullet == 0) {
-        blanks++;
-      }
-    }
+    blanks = Arrays.stream(shotgunArray).filter(value -> value == 0).count();
 
-    lives = bullets - blanks;
+    lives = bullets - (int) blanks;
     System.out.println(lives + " LIVE(S)\t" + blanks + " BLANK(S)");
   }
 
   /**
    * Checks if the shotgun stack has all live or all blank bullets (bad seed).
-   * @param stack
    * @return true (bad seed found) or false
    */
 
-  public static boolean isDogshit(Stack<Integer> stack) {
+  public boolean isDogshitSt() {
     Stack<Integer> tempStack = new Stack<>();
-    tempStack.addAll(stack);
+    tempStack.addAll(shotgun);
 
     int referenceValue = tempStack.pop();
 
@@ -220,15 +221,14 @@ class Shotgun {
 
   /**
    * Checks if the shotgun array has all live or all blank bullets (bad seed).
-   * @param x
-   * @return
+   * @return true or false
    */
 
-  public static boolean isDogshit(int[] array) {
-    int referenceValue = array[0];
+  public boolean isDogshitAr() {
+    int referenceValue = shotgunArray[0];
 
-    for (int i = 1; i < array.length; i++) {
-      if (array[i] != referenceValue) {
+    for (int i = 1; i < shotgunArray.length; i++) {
+      if (shotgunArray[i] != referenceValue) {
         return false;
       }
     }
@@ -237,19 +237,44 @@ class Shotgun {
     return true;
   }
 
-  /**
-   *
-   * @param shotgun
+  /** Shoots given player.
    * @param pl
    */
 
-  public static void shoot(Shotgun shotgun, Player pl) {
-    if (shotgun.isSawed = true) {
+  public void shoot(Player pl) {
+    System.out.println("Shooting specified player...");
+    if (isSawed = true) {
+      System.out.println("Shotgun is powered up.");
       pl.hp -= 2;
-      shotgun.isSawed = false;
+      isSawed = false;
       return;
     }
     pl.hp--;
+  }
+
+  /**
+   * Uses Hand Saw (makes the next live bullet deal 2 DMG)
+   */
+
+  public void useHandSaw() {
+    isSawed = true;
+    System.out.println("Shotgun sawed.");
+  }
+
+  /**
+   * Uses Beer (skips the currently loaded bullet)
+   */
+
+  public void useBeer() {
+    System.out.println("Skipped bullet was: " + shotgun.pop());
+  }
+
+  /**
+   * Uses magnifying glass (allows players to see currently loaded bullet)
+   */
+
+  public void useMagnifyingGlass() {
+    System.out.println("Currently loaded bullet is: " + shotgun.peek());
   }
 
   /**
@@ -259,21 +284,25 @@ class Shotgun {
   public Shotgun() {
     isSawed = false;
     size = randomGen();
+
     // Initialize shotgun stack with random size
     shotgun = new Stack<Integer>();
 
     // shotgunArray = new int[size];
 
     // Fill the shotgun stack with bullets
-    loadShotgun(shotgun, size);
+    loadShotgun(size);
 
-    while (isDogshit(shotgun)) {
-      countBullets(shotgun);
+    while (isDogshitSt()) {
+      System.out.println("Displaying first shotgun gen:");
+      displayBulletsSt();
       System.out.println("Bad seed generated. Reloading shotgun...");
-      reloadShotgun(shotgun);
+      reloadShotgunSt();
     }
 
-    countBullets(shotgun);
+    controlledBulletGen();
+
+    displayBulletsSt();
   }
 }
 
@@ -310,12 +339,13 @@ public class Game {
     int action = 0;
 
     Shotgun weapon = new Shotgun();
+
     // Player play1 = new Player();
     // Player play2 = new Player();
 
     // action = sc.nextInt();
 
-    choice(action);
+    // choice(action);
 
     sc.close();
   }
