@@ -84,10 +84,10 @@ class Shotgun {
     int blanks = size - lives;
     if (lives > blanks) diff = lives - blanks; else if (lives < blanks) diff =
       blanks - lives;
-    System.out.println("Difference is: " + diff);
+    // System.out.println("Difference is: " + diff);
 
     if (diff > 2) {
-      System.out.println("Bad Seed Detected! Reloading...");
+      // System.out.println("Bad Seed Detected! Reloading...");
       // Calculate the number of 0s and 1s needed for a better seed
       int targetZeros = (shotgun.size() + 2) / 2;
       int targetOnes = shotgun.size() - targetZeros;
@@ -178,7 +178,6 @@ class Shotgun {
     blanks = countBlanks();
 
     lives = bullets - blanks;
-
     System.out.println(lives + " LIVE(S)\t" + blanks + " BLANK(S)");
   }
 
@@ -242,9 +241,9 @@ class Shotgun {
    */
 
   public void shoot(Player pl) {
-    System.out.println("Shooting specified player...");
+    // System.out.println("Shooting specified player...");
     if (isSawed = true) {
-      System.out.println("Shotgun is powered up.");
+      // System.out.println("Shotgun is powered up.");
       pl.hp -= 2;
       isSawed = false;
       return;
@@ -258,7 +257,7 @@ class Shotgun {
 
   public void useHandSaw() {
     isSawed = true;
-    System.out.println("Shotgun sawed.");
+    // System.out.println("Shotgun sawed.");
   }
 
   /**
@@ -266,7 +265,7 @@ class Shotgun {
    */
 
   public void useBeer() {
-    System.out.println("Skipped bullet was: " + shotgun.pop());
+    // System.out.println("Skipped bullet was: " + shotgun.pop());
   }
 
   /**
@@ -274,7 +273,7 @@ class Shotgun {
    */
 
   public void useMagnifyingGlass() {
-    System.out.println("Currently loaded bullet is: " + shotgun.peek());
+    // System.out.println("Currently loaded bullet is: " + shotgun.peek());
   }
 
   /**
@@ -294,9 +293,9 @@ class Shotgun {
     loadShotgun(size);
 
     while (isDogshitSt()) {
-      System.out.println("Displaying first shotgun gen:");
+      // System.out.println("Displaying first shotgun gen:");
       displayBulletsSt();
-      System.out.println("Bad seed generated. Reloading shotgun...");
+      // System.out.println("Bad seed generated. Reloading shotgun...");
       reloadShotgunSt();
     }
 
