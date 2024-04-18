@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style_Card.css">
+  <link rel="stylesheet" href="style_Footer.css">
+  <script src="scropt.js" defer></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&family=Work+Sans&display=swap"
+    rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@500&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/84f00c5c34.js" crossorigin="anonymous"></script>
+  <script src=" https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js "></script>
+  <link href=" https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css " rel="stylesheet">
+  <!-- <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      new Splide('#image-carousel').mount();
+    });
+  </script> -->
+
+  <title>Site de eCommerce</title>
+</head>
+
+<body>
+
+  <header class="header">
+
+    <div class="grid-container">
+      <div>
+        <a href="./index.html"><img id="logo" src="imgs/logo.png"></a>
+      </div>
+
+      <div class="welcome_Section">
+        <p id="welcome">Welcome guest_User!</p>
+
+        <form id="pesquisa" class="example" action="" onsubmit="searchProducts()">
+          <input id="search" type="text" placeholder="Search for a product, Category, Sellers or Brand" name="search">
+          <button id="botao" type="submit"><i class="fa fa-search"></i>Search</button>
+        </form>
+      </div>
+
+      <div class="links_Cart">
+        <ul class="menu">
+          <li><a href="#1">Sign In</a></li>
+          <li><a href="#2">Register</a></li>
+          <li><a href="#3">My account</a></li>
+          <li><a href="#4">Track order</a></li>
+        </ul>
+        <ul class="sub_Menu">
+          <li>Cash on Delivery | 30 Day return</li>
+          <li>24/7 Customer Service <b style="padding-left: 6px;">1800 00 11 22</b>
+        </ul>
+        <a id="cart" href="#1"><i style="padding-right: 6px;" class="fa-solid fa-cart-shopping"></i>My Cart</a>
+
+      </div>
+    </div>
+  </header>
+
+  <div id="sections">
+    <a class="anchs">Aluno: Henrique Oliveira</a>
+    <a class="anchs">Curso: Ciência da Computação</a>
+    <a class="anchs">Matrícula: 805688</a>
+  </div>
+
+  <div id="pesq"></div>
+
+  <div id="cat"></div> 
+
+  <section class="flex_1">
+    <div class="grid-container_Stuff">
+      <div id="quick_Find">
+        <p style="text-align: center;padding-bottom: 10px;font-weight: 700;">Quick Find - Choose product</p>
+        <p style="text-align: center;font-weight: 500;">Find the right product at the right price
+        </p>
+        <form class="forms1" action="#">
+          <select id="j" style="margin: 20px;padding: 10px;" class="selectors" name="languages">
+            </select>
+
+          <!-- <form class="forms2" action="#">
+            <select style="margin: 20px;padding: 10px;" class="selectors" name="languages">
+              <option value="select">Brand</option>
+              <option value="nike">Nike</option>
+              <option value="Adidas">Adidas</option>
+              <option value="converse">Converse</option>
+              <option value="reebok">Reebok</option>
+              <option value="puma">Puma</option>
+            </select>
+
+            <form class="forms3" action="#">
+              <select style="margin: 20px;padding: 10px;" class="selectors" name="languages">
+                <option value="select">Category</option>
+                <option value="new">New</option>
+                <option value="limited edition">Limited Edition</option>
+                <option value="most reviewed">Most Reviewed</option>
+                <option value="coming soon">Coming Soon</option>
+              </select>
+            </form> -->
+
+              <button id="catag" style="color: white;" href="#"><u style="color: black;">Search</u></button>
+
+            <!-- <div class="newsletter">
+              <p style="text-align: center;padding-bottom: 20px;font-weight: 500;margin-top: 25px;">Sign up for our
+                Newsletter!</p>
+              <input id="news" type="text" placeholder="Email address" name="mail" required>
+              <a class="forms1" style="padding-top: 20px;color: white;" href="#"><u>Join Today!</u></a>
+            </div> -->
+      </div>
+
+      <!-- <div>
+        <section id="image-carousel" class="splide" aria-label="Awesome Carousel">
+          <div class="splide__track">
+            <ul class="splide__list">
+              <li class="splide__slide">
+                <img src="imgs/tiger 4d black.jpeg" media="(max-width: 1200px)" alt="tiger 4d black">
+              </li>
+              <li class="splide__slide">
+                <img src="imgs/tiger 4d white.jpeg" alt="tiger 4d white">
+              </li>
+              <li class="splide__slide">
+                <img src="imgs/ozweego3.png" alt="ozweego3">
+              </li>
+              <li class="splide__slide">
+                <img src="imgs/ozweego4.png" alt="ozweego3">
+              </li>
+            </ul>
+          </div>
+      </div> -->
+    </div>
+  </section>
+
+  <h1 style="font-size: 70px;color:#4a8af4;">Product Listing</h1>
+
+  <div id="tela">
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer__addr">
+      <a href="#"><img id="footer_logo" src="imgs/logo_Footer.png"></a>
+    </div>
+
+    <ul class="footer__nav">
+      <li class="nav__item">
+        <h2 class="nav__title">Payment Methods</h2>
+
+        <ul class="nav__ul">
+          <li>
+            <i class="fa-brands fa-2x fa-cc-visa"></i>
+            <i class="fa-brands fa-2x fa-cc-mastercard"></i>
+          </li>
+          <li>
+            <i class="fa-brands fa-2x fa-cc-discover"></i>
+            <i class="fa-brands fa-2x fa-cc-paypal"></i>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav__item nav__item--extra">
+        <h2 class="nav__title">Quick Links</h2>
+
+        <ul class="nav__ul nav__ul--extra">
+          <li>
+            <a href="#">Help</a>
+          </li>
+
+          <li>
+            <a href="#">FAQ</a>
+          </li>
+
+          <li>
+            <a href="#">Cancelation & Returns</a>
+          </li>
+
+        </ul>
+      </li>
+
+      <li class="nav__item nav__item--extra">
+        <h2 class="nav__title">Let's be social!</h2>
+
+        <ul class="nav__ul nav__ul--extralinks">
+
+          <li>
+            <a style="color: black;" href="https://facebook.com"><i class="fa-brands fa-2x fa-facebook"></i></a>
+          </li>
+
+          <li>
+            <a style="color: black;" href="https://twitter.com"><i class="fa-brands fa-2x fa-twitter"></i></a>
+          </li>
+
+          <li>
+            <a style="color: black;" href="https://discord.com"><i class="fa-brands fa-2x fa-discord"></i></a>
+          </li>
+
+          <li>
+            <a style="color: black;" href="https://youtube.com"><i class="fa-brands fa-2x fa-youtube"></i></a>
+          </li>
+
+        </ul>
+      </li>
+
+      <li class="nav__item nav__item--extra">
+        <h2 class="nav__title">Contact Info</h2>
+
+        <ul class="nav__ul nav__ul--extraaddress">
+          <li>
+            <a href="#">Rua Cláudio Manoel, 1.162</a>
+          </li>
+
+          <li>
+            <i style="padding-right: 5px;" class="fa-solid fa-envelope"></i><a style="color: #2054bd;"
+              href="mailto:henriqueoli2005@gmail.com"><b>henriqueoli2005@gmail.com</b></a>
+          </li>
+
+          <li>
+            <i style="padding-right: 5px;" class="fa-solid fa-phone"></i><a href="#"><b>1800 4400 22</b></a>
+          </li>
+
+        </ul>
+      </li>
+
+      <li class="nav__item">
+        <h2 class="nav__title">Legal</h2>
+
+        <ul class="nav__ul">
+          <li>
+            <a href="#">Privacy Policy</a>
+          </li>
+
+          <li>
+            <a href="#">Shipping Policy</a>
+          </li>
+
+          <li>
+            <a href="#">Terms of Use</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="legal">
+      <p style="margin: auto;">&copy; 2007 - 2014 company.com</p>
+    </div>
+  </footer>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+</body>
+
+</html>

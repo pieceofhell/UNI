@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style_Cards.css">
+  <link rel="stylesheet" href="style_Footer.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&family=Work+Sans&display=swap"
+    rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@500&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/84f00c5c34.js" crossorigin="anonymous"></script>
+  <script src=" https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js "></script>
+  <link href=" https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css " rel="stylesheet">
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      new Splide('#image-carousel').mount();
+    });
+  </script>
+  <title>Site de eCommerce</title>
+</head>
+
+<body>
+
+  <header class="header">
+
+    <div class="grid-container">
+      <div>
+        <a href="#"><img id="logo" src="imgs/logo.png"></a>
+      </div>
+
+      <div class="welcome_Section">
+        <p id="welcome">Welcome guest_User!</p>
+
+        <form id="pesquisa" class="example" action="">
+          <input type="text" placeholder="Search for a product, Category, Sellers or Brand" name="search1">
+          <button type="submit"><i class="fa fa-search"></i>Search</button>
+        </form>
+      </div>
+
+      <div class="links_Cart">
+        <ul class="menu">
+          <li><a href="#1">Sign In</a></li>
+          <li><a href="#2">Register</a></li>
+          <li><a href="#3">My account</a></li>
+          <li><a href="#4">Track order</a></li>
+        </ul>
+        <ul class="sub_Menu">
+          <li>Cash on Delivery | 30 Day return</li>
+          <li>24/7 Customer Service <b style="padding-left: 6px;">1800 00 11 22</b>
+        </ul>
+        <a id="cart" href="#1"><i style="padding-right: 6px;" class="fa-solid fa-cart-shopping"></i>My Cart</a>
+
+      </div>
+      </ul>
+    </div>
+  </header>
+
+  <section class="flex_1">
+    <div class="grid-container_Stuff">
+      <div id="quick_Find">
+        <p style="text-align: center;padding-bottom: 10px;font-weight: 700;">Quick Find - Choose product</p>
+        <p style="text-align: center;padding-bottom: 20px;font-weight: 500;">Find the right product at the right price
+        </p>
+        <form class="forms1" action="#">
+          <select class="selectors" name="languages">
+            <option value="select">Type</option>
+            <option value="athletic shoes">Athletic Shoes</option>
+            <option value="shoes">Shoes</option>
+            <option value="sneakers">Sneakers</option>
+            <option value="boots">Boots</option>
+            <option value="sandals">Sandals</option>
+          </select>
+
+          <form class="forms2" action="#">
+            <select class="selectors" name="languages">
+              <option value="select">Brand</option>
+              <option value="nike">Nike</option>
+              <option value="Adidas">Adidas</option>
+              <option value="converse">Converse</option>
+              <option value="reebok">Reebok</option>
+              <option value="puma">Puma</option>
+            </select>
+
+            <form class="forms3" action="#">
+              <select class="selectors" name="languages">
+                <option value="select">Category</option>
+                <option value="new">New</option>
+                <option value="limited edition">Limited Edition</option>
+                <option value="most reviewed">Most Reviewed</option>
+                <option value="coming soon">Coming Soon</option>
+              </select>
+            </form>
+
+            <form class="forms1" action="#">
+              <a style="color: white;" href="#"><u>Search</u></a>
+            </form>
+
+            <div class="newsletter">
+              <p style="text-align: center;padding-bottom: 20px;font-weight: 500;margin-top: 25px;">Sign up for our
+                Newsletter!</p>
+              <input id="news" type="text" placeholder="Email address" name="mail" required>
+              <a class="forms1" style="padding-top: 20px;color: white;" href="#"><u>Join Today!</u></a>
+            </div>
+      </div>
+
+      <div>
+        <section id="image-carousel" class="splide" aria-label="Awesome Carousel">
+          <div class="splide__track">
+            <ul class="splide__list">
+              <li class="splide__slide">
+                <img src="imgs/tiger 4d black.jpeg" media="(max-width: 1200px)" alt="tiger 4d black" </li>
+              <li class="splide__slide">
+                <img src="imgs/tiger 4d white.jpeg" alt="tiger 4d white">
+              </li>
+              <li class="splide__slide">
+                <img src="imgs/ozweego3.png" alt="ozweego3">
+              </li>
+              <li class="splide__slide">
+                <img src="imgs/ozweego4.png" alt="ozweego3">
+              </li>
+            </ul>
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <h1 style="font-size: 90px;color:#4a8af4;"><em>NIKE X BLUE LOCK LINEUP</em></h1>
+
+  <section class="flex">
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/isagi.jpg" alt="">
+        <div style="transform: translateY(25%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Yoichi_Isagi" id="himsagi">Isagi Yoichi</a>
+          <p>79.99<br><br>Yoichi Isagi (潔世一 Isagi Yoichi) is the protagonist of the Blue Lock series.<br>
+            Isagi is a second-year high school student, who previously played as a forward for the Ichinan High School
+            football team. When he arrived at the Blue Lock facility, he became a member of Team Z for the First
+            Selection. His main goal is to become the world's best striker.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/bachira.jpg" alt="">
+        <div style="transform: translateY(25%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Meguru_Bachira">Bachira Meguru</a>
+          <p>59.99<br><br>Meguru Bachira (蜂楽 廻 Bachira Meguru) is a contender of Blue Lock , who currently plays as a
+            center forward for Spain's FC Barcha in the Neo Egoist League.Bachira is a whimsical forward who plays
+            following his instincts and when first arriving at Blue Lock he was a member of Team Z during First
+            Selection. </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/barou.jpg" alt="">
+        <div style="transform: translateY(15%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Shoei_Baro">Barou Shouei</a>
+          <p>39.99<br><br>Shoei "King" Baro (馬狼照英 Barō Shōei) is a contender of Blue Lock, who currently plays as a
+            center forward for Italy's Ubers during the Neo Egoist League. Baro is a very selfish and arrogant type of
+            forward whose main goal is to be the star of the field at all times.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/chigiri.jpg" alt="">
+        <div style="transform: translateY(25%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Hyoma_Chigiri">Chigiri Hyoma</a>
+          <p>69.99<br><br>Hyoma Chigiri (千切 豹馬 Chigiri Hyōma) is a contender of Blue Lock, who currently plays as a left
+            wing for England's Manshine City during the Neo Egoist League. Chigiri is a forward prodigy who was chained
+            down by a leg injury in his past but he let go of his fears while at Blue Lock so he could continue playing
+            football wholeheartedly.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/kaiser.jpg" alt="">
+        <div style="transform: translateY(14%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Michael_Kaiser">Michael Kaiser</a>
+          <p>29.99<br><br>Michael Kaiser (ミヒャエル カイザー Mihyaeru Kaizā) is a prodigy U-20 forward from Germany and he plays
+            for Bastard München during the Neo Egoist League as the team's ace and main striker. Kaiser is regarded as a
+            genius and is also a member of the New Generation World XI.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/nagi.jpg" alt="">
+        <div style="transform: translateY(25%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Seishiro_Nagi">Nagi Seishiro</a>
+          <p>79.99<br><br>Seishiro Nagi (凪 誠士郎 Nagi Seishirō) is a contender for the Blue Lock Project and the titular
+            protagonist of the spin-off, Blue Lock - Episode Nagi, who currently plays as a rightwing for England's
+            Manshine City in the Neo Egoist League. When first arriving at Blue Lock, Nagi was a member of Team V and
+            was the best player in his team.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/reo.jpg" alt="">
+        <div style="transform: translateY(20%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Reo_Mikage">Reo Mikage</a>
+          <p>39.99<br><br> Mikage (御影 玲王 Mikage Reo) is a contender for the Blue Lock Project, who currently plays as a
+            center midfielder for England's Manshine City during the Neo Egoist League. Reo is the heir of the Mikage
+            Corporation, with his total assets valued at about 705.8 billion yen or $5.3 billion USD.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/rin.jpg" alt="">
+        <div style="transform: translateY(15%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Rin_Itoshi">Itoshi Rin</a>
+          <p>39.99<br><br>Rin Itoshi (糸師 凛 Itoshi Rin) is a contender of Blue Lock, who currently plays as a regular
+            for France's Paris X Gen in the Neo Egoist League. Rin is the younger brother of Sae Itoshi, who started
+            playing football with him at a young age.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/sae.jpg" alt="">
+        <div style="transform: translateY(25%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Sae_Itoshi">Itoshi Sae</a>
+          <p>89.99<br><br>Sae Itoshi (糸師冴 Itoshi Sae) is a prodigy football player, who is known as the best player in
+            Japan. Sae is also a member of the New Generation World XI, as well as the Royale (Real Madrid) Youth team.
+            He is the older brother of Rin Itoshi. Sae's main goal before the start of the series was to become the best
+            striker in the world.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/aiku.jpg" alt="">
+        <div style="transform: translateY(25%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Aiku_Oliver">Oliver Aiku</a>
+          <p>79.99<br><br>Oliver Aiku (オリヴァ・愛空 Oriva Aiku) is the former captain and centerback of the Japan U-20 team.
+            He currently plays as a regular for Italy's Ubers during the Neo Egoist League. Aiku is a tall man with
+            shaggy brown hair with green ends and light facial hair. As a young boy, Oliver was a relatively big player
+            and, as he got older, he got bulkier.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <h1 style="font-size: 40px;color:#ffffff;text-align: left;padding-left: 40px;">Most Reviewed Products</h1>
+
+  <section style="padding-bottom: 30px;" class="flex">
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/shidou.jpg" alt="">
+        <div style="transform: translateY(14%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Ryusei_Shido" id="himsagi">Shidou Ryusei</a>
+          <p>109.99<br><br>Ryusei Shido (士道 龍聖 Shidō Ryūsei) is a contender of the Blue Lock, who currently plays for
+            France's Paris X Gen. Shido, unlike most forwards, has no concrete dream of becoming the world's best
+            striker, but rather seeks to enjoy life to the fullest by playing football.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/barou.jpg" alt="">
+        <div style="transform: translateY(15%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Shoei_Baro">Barou Shouei</a>
+          <p>39.99<br><br>Shoei "King" Baro (馬狼照英 Barō Shōei) is a contender of Blue Lock, who currently plays as a
+            center forward for Italy's Ubers during the Neo Egoist League. Baro is a very selfish and arrogant type of
+            forward whose main goal is to be the star of the field at all times.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="cta">
+        <img src="imgs/kunigami.jpg" alt="">
+        <div style="transform: translateY(25%);" class="text">
+          <a href="https://bluelock.fandom.com/wiki/Rensuke_Kunigami">Ren. Kunigami</a>
+          <p>99.99<br><br>Rensuke Kunigami (國神 錬介 Kunigami Rensuke) is a contender of Blue Lock, who currently plays as
+            a forward for Germany's Bastard München. He is a hot blooded forward who's main goal is to become the best
+            striker in the world and in turn a football superhero. When first arriving at Blue Lock he was a member of
+            Team Z.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    <div class="footer__addr">
+      <a href="#"><img id="footer_logo" src="imgs/logo_Footer.png"></a>
+    </div>
+
+    <ul class="footer__nav">
+      <li class="nav__item">
+        <h2 class="nav__title">Payment Methods</h2>
+
+        <ul class="nav__ul">
+          <li>
+            <i class="fa-brands fa-2x fa-cc-visa"></i>
+            <i class="fa-brands fa-2x fa-cc-mastercard"></i>
+          </li>
+          <li>
+            <i class="fa-brands fa-2x fa-cc-discover"></i>
+            <i class="fa-brands fa-2x fa-cc-paypal"></i>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav__item nav__item--extra">
+        <h2 class="nav__title">Quick Links</h2>
+
+        <ul class="nav__ul nav__ul--extra">
+          <li>
+            <a href="#">Help</a>
+          </li>
+
+          <li>
+            <a href="#">FAQ</a>
+          </li>
+
+          <li>
+            <a href="#">Cancelation & Returns</a>
+          </li>
+
+        </ul>
+      </li>
+
+      <li class="nav__item nav__item--extra">
+        <h2 class="nav__title">Let's be social!</h2>
+
+        <ul class="nav__ul nav__ul--extralinks">
+
+          <li>
+            <a style="color: black;" href="https://facebook.com"><i class="fa-brands fa-2x fa-facebook"></i></a>
+          </li>
+
+          <li>
+            <a style="color: black;" href="https://twitter.com"><i class="fa-brands fa-2x fa-twitter"></i></a>
+          </li>
+
+          <li>
+            <a style="color: black;" href="https://discord.com"><i class="fa-brands fa-2x fa-discord"></i></a>
+          </li>
+
+          <li>
+            <a style="color: black;" href="https://youtube.com"><i class="fa-brands fa-2x fa-youtube"></i></a>
+          </li>
+
+        </ul>
+      </li>
+
+      <li class="nav__item nav__item--extra">
+        <h2 class="nav__title">Contact Info</h2>
+
+        <ul class="nav__ul nav__ul--extraaddress">
+          <li>
+            <a href="#">Rua Cláudio Manoel, 1.162</a>
+          </li>
+
+          <li>
+            <i style="padding-right: 5px;" class="fa-solid fa-envelope"></i><a style="color: #2054bd;"
+              href="mailto:henriqueoli2005@gmail.com"><b>henriqueoli2005@gmail.com</b></a>
+          </li>
+
+          <li>
+            <i style="padding-right: 5px;" class="fa-solid fa-phone"></i><a href="#"><b>1800 4400 22</b></a>
+          </li>
+
+        </ul>
+      </li>
+
+      <li class="nav__item">
+        <h2 class="nav__title">Legal</h2>
+
+        <ul class="nav__ul">
+          <li>
+            <a href="#">Privacy Policy</a>
+          </li>
+
+          <li>
+            <a href="#">Shipping Policy</a>
+          </li>
+
+          <li>
+            <a href="#">Terms of Use</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="legal">
+      <p style="margin: auto;">&copy; 2007 - 2014 company.com</p>
+    </div>
+  </footer>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+</body>
+
+</html>
