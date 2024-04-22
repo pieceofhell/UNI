@@ -229,7 +229,8 @@ public class InvoiceRegister {
       Scanner scanner = new Scanner(System.in);
       List<InvoiceRegister> allTransactions = new ArrayList<>();
       String folderPath =
-        "D:/gaming/site inovador/code/github/UNI/projects/extractDataFromCSV";
+        "C:/Users/henri/Downloads";
+      // "D:/gaming/site inovador/code/github/UNI/projects/extractDataFromCSV"
       File folder = new File(folderPath);
       List<String> csvFiles = findCSVFiles(folder);
 
