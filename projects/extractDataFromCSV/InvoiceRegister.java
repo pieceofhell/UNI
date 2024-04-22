@@ -228,8 +228,7 @@ public class InvoiceRegister {
       String filePath = "";
       Scanner scanner = new Scanner(System.in);
       List<InvoiceRegister> allTransactions = new ArrayList<>();
-      String folderPath =
-        "C:/Users/henri/Downloads";
+      String folderPath = "C:/Users/henri/Downloads";
       // "D:/gaming/site inovador/code/github/UNI/projects/extractDataFromCSV"
       File folder = new File(folderPath);
       List<String> csvFiles = findCSVFiles(folder);
@@ -237,8 +236,8 @@ public class InvoiceRegister {
       if (csvFiles.isEmpty()) {
         System.out.println("No CSV files found in the specified folder.");
       } else if (csvFiles.size() == 1) {
-        System.out.println("Found 1 CSV file: " + csvFiles.get(0));
         filePath = csvFiles.get(0);
+        System.out.println("Found 1 CSV file: " + filePath);
       } else {
         System.out.println("Found multiple CSV files:");
         for (int i = 0; i < csvFiles.size(); i++) {
@@ -263,7 +262,7 @@ public class InvoiceRegister {
         countRegisters++;
       }
 
-      System.out.println("Total de registros: " + countRegisters);
+      System.out.println("\nTotal de registros: " + countRegisters);
       // float[] valores = new float[countRegisters];
       // float[] valoresPositivos = new float[countRegisters];
       // float[] valoresNegativos = new float[countRegisters];
@@ -273,16 +272,18 @@ public class InvoiceRegister {
       //   valoresPositivos[i] = removeNegative(allTransactions.get(i).valor);
       //   valoresNegativos[i] = removePositive(allTransactions.get(i).valor);
 
-      //   writeToCsv(
-      //     "D:/gaming/site inovador/code/github/UNI/projects/extractDataFromCSV/teste.csv",
-      //     allTransactions
-      //   );
-      // }
+      String outputPath = "C:/Users/henri/Downloads/";
+      System.out.println("Digite o nome do arquivo de saída (com ou sem extensão):");
+      String fileName = scanner.next();
+      String csv = ".csv";
+      outputPath += fileName;
       
-      // TODO: implementar maneira de usuário escolher nome/pasta do arquivo de saída
+      if (!fileName.endsWith(csv)) {
+        outputPath += csv;
+      }
 
       writeToCsv(
-        "D:/gaming/site inovador/code/github/UNI/projects/extractDataFromCSV/extradoTratado.csv",
+        outputPath,
         allTransactions
       );
       scanner.close();
