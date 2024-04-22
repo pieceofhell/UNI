@@ -1,15 +1,8 @@
 import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.text.Normalizer;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class test {
+public class Tests {
 
   public static float replaceCommaToDot(String valor) {
     System.out.println(valor);
@@ -41,20 +34,18 @@ public class test {
     return pattern.matcher(normalized).replaceAll("");
   }
 
+  
+
   public static String removeDoubleSpaces(String str) {
     return str.replaceAll("\\s+", " ");
   }
 
   public static void main(String[] args) {
-    String entrada = "-1.939,24\n";
-    String joao = "pênis";
-    String historia = "joão se cagóú no rio. ele gósta de cómer bóstâ.";
-    String deb = "Café a là carte.";
-    String cred =
-      "essa é  uma string       de teste para   testar espaços    .";
-    // float valor = replaceCommaToDot(entrada);
-    String bagu = removeAccents2(deb);
-    cred = removeDoubleSpaces(cred);
-    System.out.println(bagu);
+    float a = 0 * -1;
+    System.out.println(a);
+    // Scanner sc = new Scanner(System.in);
+    // String entradaUsuario = sc.nextLine();
+    // System.out.println(removeAccents2(entradaUsuario));
+    // sc.close();
   }
 }

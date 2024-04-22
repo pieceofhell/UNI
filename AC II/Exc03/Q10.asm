@@ -3,6 +3,7 @@
 .globl _start
 _start:
 addi s1, zero, 1  # x = 1
+
 nop
 .data
 x1: .word 15
