@@ -20,6 +20,8 @@ public class InvoiceRegister {
   private String metodoPagamento;
   private String historico;
   private float valor;
+  private boolean isUber = false;
+  private boolean isComida = false;
 
   public static List<InvoiceRegister> read(String nomeArquivo)
     throws IOException {
@@ -57,12 +59,43 @@ public class InvoiceRegister {
       transaction.data = stringToDate(transaction.dataString);
       transaction.dataNum = dateToLong(transaction.data);
 
+      transaction.isUber = isUber(transaction.historico);
+      transaction.isComida = isFood(transaction.historico);
+
       allTransactions.add(transaction);
     }
 
     buffer.close();
     file.close();
     return allTransactions;
+  }
+
+  public static boolean isUber(String historico) {
+    return (
+      historico.contains("UBER") ||
+      historico.contains("Uber") ||
+      historico.contains("uber")
+    );
+  }
+
+  public static boolean isFood(String historico) {
+    return (
+      historico.contains("IFOOD") ||
+      historico.contains("Ifood") ||
+      historico.contains("ifood") ||
+      historico.contains("Pizza") ||
+      historico.contains("Pizzaria") ||
+      historico.contains("Hamburguer") ||
+      historico.contains("Sorvete") ||
+      historico.contains("Acai") ||
+      historico.contains("Subway") ||
+      historico.contains("batata") ||
+      historico.contains("McDonalds") ||
+      historico.contains("Burger") ||
+      historico.contains("Burguer") ||
+      historico.contains("Burgueria") ||
+      historico.contains("Attelier")
+    );
   }
 
   public static String removeDoubleSpaces(String str) {
@@ -87,6 +120,17 @@ public class InvoiceRegister {
 
   public static String replaceDotToComma(float value) {
     return String.valueOf(value).replace('.', ',');
+  }
+
+  public static String normalize(String str) {
+    if (str.contains("*")) {
+      str = str.substring(str.indexOf("*") + 1);
+    }
+    str = str.replace("Belo Horizont Bra", "");
+    if (Character.isLowerCase(str.charAt(0))) {
+      str = Character.toUpperCase(str.charAt(0)) + str.substring(1);
+    }
+    return str;
   }
 
   public static long dateToLong(Date date) {
@@ -129,8 +173,65 @@ public class InvoiceRegister {
     try {
       FileWriter file = new FileWriter(filePath);
       BufferedWriter buffer = new BufferedWriter(file);
-
       for (int i = transactions.size() - 1; i >= 0; i--) {
+        InvoiceRegister transaction = transactions.get(i);
+        String negativeValue = removeNegative(transaction.valor) == 0
+          ? ""
+          : replaceDotToComma(removeNegative(transaction.valor));
+        String positiveValue = removePositive(transaction.valor) == 0
+          ? ""
+          : replaceDotToComma((removePositive(transaction.valor) * -1));
+
+        if (transaction.isUber) {
+          buffer.write(
+            transaction.dataNum +
+            ";" +
+            ";" +
+            normalize(transaction.historico) +
+            ";" +
+            positiveValue +
+            ";" +
+            ";" +
+            ";" +
+            ";" +
+            ";" +
+            "\n"
+          );
+        } else if (transaction.isComida) {
+          buffer.write(
+            transaction.dataNum +
+            ";" +
+            ";" +
+            normalize(transaction.historico) +
+            ";" +
+            ";" +
+            ";" +
+            positiveValue +
+            ";" +
+            ";" +
+            ";" +
+            "\n"
+          );
+        } else {
+          buffer.write(
+            transaction.dataNum +
+            ";" +
+            ";" +
+            normalize(transaction.historico) +
+            ";" +
+            ";" +
+            ";" +
+            ";" +
+            ";" +
+            negativeValue +
+            ";" +
+            positiveValue +
+            "\n"
+          );
+        }
+      }
+
+      /*for (int i = transactions.size() - 1; i >= 0; i--) {
         InvoiceRegister transaction = transactions.get(i);
         String negativeValue = removeNegative(transaction.valor) == 0
           ? ""
@@ -154,7 +255,7 @@ public class InvoiceRegister {
           positiveValue +
           "\n"
         );
-      }
+      }*/
 
       /* ordem inversa
       for (int i = transactions.size() - 1; i >= 0; i--) {
@@ -273,19 +374,18 @@ public class InvoiceRegister {
       //   valoresNegativos[i] = removePositive(allTransactions.get(i).valor);
 
       String outputPath = "C:/Users/henri/Downloads/";
-      System.out.println("Digite o nome do arquivo de saída (com ou sem extensão):");
+      System.out.println(
+        "Digite o nome do arquivo de saída (com ou sem extensao):"
+      );
       String fileName = scanner.next();
       String csv = ".csv";
       outputPath += fileName;
-      
+
       if (!fileName.endsWith(csv)) {
         outputPath += csv;
       }
 
-      writeToCsv(
-        outputPath,
-        allTransactions
-      );
+      writeToCsv(outputPath, allTransactions);
       scanner.close();
     } catch (IOException e) {
       System.out.println("ERRO NA LEITURA DO ARQUIVO!");

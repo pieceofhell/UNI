@@ -21,6 +21,14 @@ public class Tests {
       .replaceAll("[ç]", "c");
   }
 
+  public static boolean isUber(String historico) {
+    return (
+      historico.contains("UBER") ||
+      historico.contains("Uber") ||
+      historico.contains("uber")
+    );
+  }
+
   public static String removeAccents2(String input) {
     if (input == null) {
       return null;
@@ -41,8 +49,12 @@ public class Tests {
   }
 
   public static void main(String[] args) {
-    float a = 0 * -1;
-    System.out.println(a);
+    
+    String a = "crazybananaer";
+    String b = "crazybananaUber";
+    if (isUber(b)) {
+      System.out.println("a tem uber");      
+    }
     // Scanner sc = new Scanner(System.in);
     // String entradaUsuario = sc.nextLine();
     // System.out.println(removeAccents2(entradaUsuario));
