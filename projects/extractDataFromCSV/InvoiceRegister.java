@@ -80,10 +80,6 @@ public class InvoiceRegister {
 
   public static boolean isFood(String historico) {
     return (
-      historico.contains("IFOOD") ||
-      historico.contains("Ifood") ||
-      historico.contains("ifood") ||
-      historico.contains("Pizza") ||
       historico.contains("Pizzaria") ||
       historico.contains("Hamburguer") ||
       historico.contains("Sorvete") ||
@@ -94,7 +90,8 @@ public class InvoiceRegister {
       historico.contains("Burger") ||
       historico.contains("Burguer") ||
       historico.contains("Burgueria") ||
-      historico.contains("Attelier")
+      historico.contains("Attelier") ||
+      historico.contains("Sucos")
     );
   }
 
