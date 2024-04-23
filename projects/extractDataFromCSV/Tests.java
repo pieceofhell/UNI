@@ -2,6 +2,7 @@ import java.util.Scanner;
 import java.text.Normalizer;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("unused")
 public class Tests {
 
   public static float replaceCommaToDot(String valor) {

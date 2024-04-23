@@ -71,27 +71,25 @@ public class InvoiceRegister {
   }
 
   public static boolean isUber(String historico) {
-    return (
-      historico.contains("UBER") ||
-      historico.contains("Uber") ||
-      historico.contains("uber")
-    );
+    String lowerCaseHistorico = historico.toLowerCase();
+    return lowerCaseHistorico.contains("uber");
   }
 
   public static boolean isFood(String historico) {
+    String lowerCaseHistorico = historico.toLowerCase();
     return (
-      historico.contains("Pizzaria") ||
-      historico.contains("Hamburguer") ||
-      historico.contains("Sorvete") ||
-      historico.contains("Acai") ||
-      historico.contains("Subway") ||
-      historico.contains("batata") ||
-      historico.contains("McDonalds") ||
-      historico.contains("Burger") ||
-      historico.contains("Burguer") ||
-      historico.contains("Burgueria") ||
-      historico.contains("Attelier") ||
-      historico.contains("Sucos")
+      lowerCaseHistorico.contains("pizzaria") ||
+      lowerCaseHistorico.contains("hamburguer") ||
+      lowerCaseHistorico.contains("sorvete") ||
+      lowerCaseHistorico.contains("acai") ||
+      lowerCaseHistorico.contains("subway") ||
+      lowerCaseHistorico.contains("batata") ||
+      lowerCaseHistorico.contains("mcdonalds") ||
+      lowerCaseHistorico.contains("burger") ||
+      lowerCaseHistorico.contains("burguer") ||
+      lowerCaseHistorico.contains("burgueria") ||
+      lowerCaseHistorico.contains("attelier") ||
+      lowerCaseHistorico.contains("sucos")
     );
   }
 
@@ -104,10 +102,12 @@ public class InvoiceRegister {
     return str
       .replaceAll("[éêè]", "e")
       .replaceAll("[óôò]", "o")
-      .replaceAll("[áãâà]", "a")
+      .replaceAll("[áãâàÃ]", "a")
       .replaceAll("[í]", "i")
       .replaceAll("[ú]", "u")
-      .replaceAll("[ç]", "c");
+      .replaceAll("[ç]", "c")
+      .replaceAll("©", "")
+      .replaceAll("¢", "");
   }
 
   public static String removeDotsReplaceComma(String valor) {
@@ -332,22 +332,27 @@ public class InvoiceRegister {
       List<String> csvFiles = findCSVFiles(folder);
 
       if (csvFiles.isEmpty()) {
-        System.out.println("No CSV files found in the specified folder.");
+        System.out.println(
+          "Nenhum arquivo csv encontrado na pasta especificada. Pasta: " +
+          folderPath
+        );
       } else if (csvFiles.size() == 1) {
         filePath = csvFiles.get(0);
-        System.out.println("Found 1 CSV file: " + filePath);
+        System.out.println("Arquivo csv encontrado: " + filePath);
       } else {
-        System.out.println("Found multiple CSV files:");
+        System.out.println("Diversos arquivos CSV encontrados: ");
         for (int i = 0; i < csvFiles.size(); i++) {
           System.out.println((i + 1) + ". " + csvFiles.get(i));
         }
-        System.out.print("Enter the number of the CSV file you want: ");
+        System.out.print("Insira o número do arquivo CSV desejado: ");
         int choice = scanner.nextInt();
         if (choice >= 1 && choice <= csvFiles.size()) {
-          System.out.println("You chose: " + csvFiles.get(choice - 1));
+          System.out.println(
+            "Você escolheu: \n" + csvFiles.get(choice - 1) + "\n"
+          );
           filePath = csvFiles.get(choice - 1);
         } else {
-          System.out.println("Invalid choice.");
+          System.out.println("Escolha inválida.");
         }
       }
 
