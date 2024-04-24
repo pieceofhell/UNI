@@ -45,11 +45,11 @@ public class InvoiceRegister {
         (fields.length > 0 && !fields[0].isEmpty()) ? fields[0] : "null";
       transaction.metodoPagamento =
         (fields.length > 1 && !fields[1].isEmpty())
-          ? removeAccents(fields[1])
+          ? removeGarbage(fields[1])
           : "null";
       transaction.historico =
         (fields.length > 2 && !fields[2].isEmpty())
-          ? removeAccents(fields[2])
+          ? removeGarbage(fields[2])
           : "Poupanca";
       transaction.valor =
         (fields.length > 3 && !fields[3].isEmpty())
@@ -97,17 +97,28 @@ public class InvoiceRegister {
     return str.replaceAll("\\s+", " ");
   }
 
-  public static String removeAccents(String str) {
-    str = removeDoubleSpaces(str);
-    return str
-      .replaceAll("[éêè]", "e")
-      .replaceAll("[óôò]", "o")
-      .replaceAll("[áãâàÃ]", "a")
-      .replaceAll("[í]", "i")
-      .replaceAll("[ú]", "u")
-      .replaceAll("[ç]", "c")
-      .replaceAll("©", "")
-      .replaceAll("¢", "");
+  public static String removeGarbage(String str) {
+    str =
+      str
+        .replaceAll("\\s+", " ")
+        .replaceAll("[éêè]", "e")
+        .replaceAll("[óôò]", "o")
+        .replaceAll("[áãâà]", "a")
+        .replaceAll("[í]", "i")
+        .replaceAll("[ú]", "u")
+        .replaceAll("[ç]", "c")
+        .replaceAll("[Ã]", "")
+        .replaceAll("©", "é")
+        .replaceAll("¢", "â");
+
+    if (str.contains("*")) {
+      str = str.substring(str.indexOf("*") + 1);
+    }
+    str = str.replace("Belo Horizont Bra", "");
+    if (Character.isLowerCase(str.charAt(0))) {
+      str = Character.toUpperCase(str.charAt(0)) + str.substring(1);
+    }
+    return str;
   }
 
   public static String removeDotsReplaceComma(String valor) {
@@ -117,17 +128,6 @@ public class InvoiceRegister {
 
   public static String replaceDotToComma(float value) {
     return String.valueOf(value).replace('.', ',');
-  }
-
-  public static String normalize(String str) {
-    if (str.contains("*")) {
-      str = str.substring(str.indexOf("*") + 1);
-    }
-    str = str.replace("Belo Horizont Bra", "");
-    if (Character.isLowerCase(str.charAt(0))) {
-      str = Character.toUpperCase(str.charAt(0)) + str.substring(1);
-    }
-    return str;
   }
 
   public static long dateToLong(Date date) {
@@ -184,7 +184,7 @@ public class InvoiceRegister {
             transaction.dataNum +
             ";" +
             ";" +
-            normalize(transaction.historico) +
+            removeGarbage(transaction.historico) +
             ";" +
             positiveValue +
             ";" +
@@ -199,7 +199,7 @@ public class InvoiceRegister {
             transaction.dataNum +
             ";" +
             ";" +
-            normalize(transaction.historico) +
+            removeGarbage(transaction.historico) +
             ";" +
             ";" +
             ";" +
@@ -214,7 +214,7 @@ public class InvoiceRegister {
             transaction.dataNum +
             ";" +
             ";" +
-            normalize(transaction.historico) +
+            removeGarbage(transaction.historico) +
             ";" +
             ";" +
             ";" +
@@ -227,60 +227,6 @@ public class InvoiceRegister {
           );
         }
       }
-
-      /*for (int i = transactions.size() - 1; i >= 0; i--) {
-        InvoiceRegister transaction = transactions.get(i);
-        String negativeValue = removeNegative(transaction.valor) == 0
-          ? ""
-          : replaceDotToComma(removeNegative(transaction.valor));
-        String positiveValue = removePositive(transaction.valor) == 0
-          ? ""
-          : replaceDotToComma((removePositive(transaction.valor) * -1));
-
-        buffer.write(
-          transaction.dataNum +
-          ";" +
-          ";" +
-          transaction.historico +
-          ";" +
-          ";" +
-          ";" +
-          ";" +
-          ";" +
-          negativeValue +
-          ";" +
-          positiveValue +
-          "\n"
-        );
-      }*/
-
-      /* ordem inversa
-      for (int i = transactions.size() - 1; i >= 0; i--) {
-        InvoiceRegister transaction = transactions.get(i);
-        String negativeValue = removeNegative(transaction.valor) == 0
-          ? ""
-          : replaceDotToComma(removeNegative(transaction.valor));
-        String positiveValue = removePositive(transaction.valor) == 0
-          ? ""
-          : replaceDotToComma((removePositive(transaction.valor) * -1));
-
-        buffer.write(
-          transaction.dataNum +
-          ";" +
-          ";" +
-          transaction.historico +
-          ";" +
-          ";" +
-          ";" +
-          ";" +
-          ";" +
-          negativeValue +
-          ";" +
-          positiveValue +
-          "\n"
-        );
-      }
-       */
 
       buffer.close();
       file.close();
