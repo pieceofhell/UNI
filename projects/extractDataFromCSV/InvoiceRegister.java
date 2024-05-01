@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class InvoiceRegister {
 
@@ -79,6 +81,7 @@ public class InvoiceRegister {
     String lowerCaseHistorico = historico.toLowerCase();
     return (
       lowerCaseHistorico.contains("pizzaria") ||
+      lowerCaseHistorico.contains("trigopane") ||
       lowerCaseHistorico.contains("hamburguer") ||
       lowerCaseHistorico.contains("sorvete") ||
       lowerCaseHistorico.contains("acai") ||
@@ -102,7 +105,7 @@ public class InvoiceRegister {
     return str
       .replaceAll("[éêè]", "e")
       .replaceAll("[óôò]", "o")
-      .replaceAll("[áãâàÃ]", "a")
+      .replaceAll("[áãâàÃ]", "chosenFilePath")
       .replaceAll("[í]", "i")
       .replaceAll("[ú]", "u")
       .replaceAll("[ç]", "c")
@@ -228,60 +231,6 @@ public class InvoiceRegister {
         }
       }
 
-      /*for (int i = transactions.size() - 1; i >= 0; i--) {
-        InvoiceRegister transaction = transactions.get(i);
-        String negativeValue = removeNegative(transaction.valor) == 0
-          ? ""
-          : replaceDotToComma(removeNegative(transaction.valor));
-        String positiveValue = removePositive(transaction.valor) == 0
-          ? ""
-          : replaceDotToComma((removePositive(transaction.valor) * -1));
-
-        buffer.write(
-          transaction.dataNum +
-          ";" +
-          ";" +
-          transaction.historico +
-          ";" +
-          ";" +
-          ";" +
-          ";" +
-          ";" +
-          negativeValue +
-          ";" +
-          positiveValue +
-          "\n"
-        );
-      }*/
-
-      /* ordem inversa
-      for (int i = transactions.size() - 1; i >= 0; i--) {
-        InvoiceRegister transaction = transactions.get(i);
-        String negativeValue = removeNegative(transaction.valor) == 0
-          ? ""
-          : replaceDotToComma(removeNegative(transaction.valor));
-        String positiveValue = removePositive(transaction.valor) == 0
-          ? ""
-          : replaceDotToComma((removePositive(transaction.valor) * -1));
-
-        buffer.write(
-          transaction.dataNum +
-          ";" +
-          ";" +
-          transaction.historico +
-          ";" +
-          ";" +
-          ";" +
-          ";" +
-          ";" +
-          negativeValue +
-          ";" +
-          positiveValue +
-          "\n"
-        );
-      }
-       */
-
       buffer.close();
       file.close();
     } catch (IOException e) {
@@ -322,41 +271,73 @@ public class InvoiceRegister {
   }
 
   public static void main(String[] args) {
+    // String testFileDirectory = "";
+    // JFileChooser chooser = new JFileChooser();
+    // String userHome = System.getProperty("user.home");
+    // File downloadsFolder = new File(userHome, "Downloads");
+    // chooser.setCurrentDirectory(downloadsFolder);
+    // chooser.setDialogTitle("choosertitle");
+    // chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    // chooser.setAcceptAllFileFilterUsed(false);
+
+    // if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+    //   System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+    //   System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
+    //   testFileDirectory = chooser.getSelectedFile().toString();
+    //   testFileDirectory = testFileDirectory.replace("\\", "/");
+    //   System.out.println("testFileDirectory: " + testFileDirectory);
+    // } else {
+    //   System.out.println("No Selection ");
+    // }
+    String chosenFilePath = "";
+    JFileChooser chooser = new JFileChooser(
+      System.getProperty("user.home") + "/Downloads"
+    );
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(".csv", "csv");
+    chooser.setFileFilter(filter);
+    int returnVal = chooser.showOpenDialog(null);
+    if (returnVal == JFileChooser.APPROVE_OPTION) {
+      System.out.println(
+        "ARQIVO ESCOLHIDO: " + chooser.getSelectedFile().getName()
+      );
+      chosenFilePath = chooser.getSelectedFile().getAbsolutePath();
+    }
+    chosenFilePath = chosenFilePath.replace("\\", "/");
     try {
-      String filePath = "";
+      // String filePath = "";
       Scanner scanner = new Scanner(System.in);
       List<InvoiceRegister> allTransactions = new ArrayList<>();
-      String folderPath = "C:/Users/henri/Downloads";
-      // "D:/gaming/site inovador/code/github/UNI/projects/extractDataFromCSV"
-      File folder = new File(folderPath);
-      List<String> csvFiles = findCSVFiles(folder);
+      // String folderPath = testFileDirectory;
+      // // "D:/gaming/site inovador/code/github/UNI/projects/extractDataFromCSV"
+      // File folder = new File(folderPath);
+      // List<String> csvFiles = findCSVFiles(folder);
 
-      if (csvFiles.isEmpty()) {
-        System.out.println(
-          "Nenhum arquivo csv encontrado na pasta especificada. Pasta: " +
-          folderPath
-        );
-      } else if (csvFiles.size() == 1) {
-        filePath = csvFiles.get(0);
-        System.out.println("Arquivo csv encontrado: " + filePath);
-      } else {
-        System.out.println("Diversos arquivos CSV encontrados: ");
-        for (int i = 0; i < csvFiles.size(); i++) {
-          System.out.println((i + 1) + ". " + csvFiles.get(i));
-        }
-        System.out.print("Insira o número do arquivo CSV desejado: ");
-        int choice = scanner.nextInt();
-        if (choice >= 1 && choice <= csvFiles.size()) {
-          System.out.println(
-            "Você escolheu: \n" + csvFiles.get(choice - 1) + "\n"
-          );
-          filePath = csvFiles.get(choice - 1);
-        } else {
-          System.out.println("Escolha inválida.");
-        }
-      }
+      // if (csvFiles.isEmpty()) {
+      //   System.out.println(
+      //     "Nenhum arquivo csv encontrado na pasta especificada. Pasta: " +
+      //     folderPath
+      //   );
+      // } else if (csvFiles.size() == 1) {
+      //   filePath = csvFiles.get(0);
+      //   System.out.println("Arquivo csv encontrado: " + filePath);
+      // } else {
+      //   System.out.println("Diversos arquivos CSV encontrados: ");
+      //   for (int i = 0; i < csvFiles.size(); i++) {
+      //     System.out.println((i + 1) + ". " + csvFiles.get(i));
+      //   }
+      //   System.out.print("Insira o número do arquivo CSV desejado: ");
+      //   int choice = scanner.nextInt();
+      //   if (choice >= 1 && choice <= csvFiles.size()) {
+      //     System.out.println(
+      //       "Você escolheu: \n" + csvFiles.get(choice - 1) + "\n"
+      //     );
+      //     filePath = csvFiles.get(choice - 1);
+      //   } else {
+      //     System.out.println("Escolha inválida.");
+      //   }
+      // }
 
-      allTransactions = read(filePath);
+      allTransactions = read(chosenFilePath);
 
       int countRegisters = 0;
 
@@ -366,16 +347,8 @@ public class InvoiceRegister {
       }
 
       System.out.println("\nTotal de registros: " + countRegisters);
-      // float[] valores = new float[countRegisters];
-      // float[] valoresPositivos = new float[countRegisters];
-      // float[] valoresNegativos = new float[countRegisters];
 
-      // for (int i = 0; i < countRegisters; i++) {
-      //   valores[i] = allTransactions.get(i).valor;
-      //   valoresPositivos[i] = removeNegative(allTransactions.get(i).valor);
-      //   valoresNegativos[i] = removePositive(allTransactions.get(i).valor);
-
-      String outputPath = "C:/Users/henri/Downloads/";
+      String outputPath = chosenFilePath;
       System.out.println(
         "Digite o nome do arquivo de saída (com ou sem extensao):"
       );

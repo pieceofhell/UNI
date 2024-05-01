@@ -1,6 +1,8 @@
 import java.util.Scanner;
+import java.io.File;
 import java.text.Normalizer;
 import java.util.regex.Pattern;
+import javax.swing.JFileChooser;
 
 @SuppressWarnings("unused")
 public class Tests {
@@ -49,16 +51,22 @@ public class Tests {
     return str.replaceAll("\\s+", " ");
   }
 
+  
+
   public static void main(String[] args) {
-    
-    String a = "crazybananaer";
-    String b = "crazybananaUber";
-    if (isUber(b)) {
-      System.out.println("a tem uber");      
-    }
-    // Scanner sc = new Scanner(System.in);
-    // String entradaUsuario = sc.nextLine();
-    // System.out.println(removeAccents2(entradaUsuario));
-    // sc.close();
+  JFileChooser chooser = new JFileChooser();
+  String userHome = System.getProperty("user.home");
+  File downloadsFolder = new File(userHome, "Downloads");
+  chooser.setCurrentDirectory(downloadsFolder);
+  chooser.setDialogTitle("choosertitle");
+  chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+  chooser.setAcceptAllFileFilterUsed(false);
+
+  if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+    System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+    System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
+  } else {
+    System.out.println("No Selection ");
+  }
   }
 }
