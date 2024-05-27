@@ -1,0 +1,31 @@
+Q1.
+
+    π first_name, last_name σ gender = 'F' actors
+
+Q2.
+
+    π name σ year > 1999 movies
+
+Q3.
+
+    A = π name, director_id σ id = movie_id (movies ⨝ movies_directors)
+    π name, first_name, last_name σ id = director_id (A ⨝ directors) 
+
+Q4.
+
+    A = π name, rank, actor_id, role σ id = movie_id (movies ⨝ roles)
+    B = π first_name, last_name, rank, role σ actor_id = id (A ⨝ actors)
+    π name, first_name, last_name, role σ rank ≥ 6 (B ⨝ A)
+
+Q5.
+
+    A = γ director_id; count(movie_id)-> sum (movies_directors)
+    π first_name, last_name, sum σ id = director_id (A ⨝ directors)
+
+Q6.
+
+    γ genre; count(movie_id)-> qty_movie_genres (movies_genres)
+
+Q7.
+
+    γ genre; min(rank)->min, max(rank)->max, avg(rank)->avg (movies_genres ⨝ (ρ movie_id<-id (movies)))

@@ -1,0 +1,30 @@
+Q1
+
+    first_name, last_name actors ∩ π first_name, last_name directors
+
+Q2
+
+    X = π first_name, last_name (actors)
+    Y = π first_name, last_name (directors)
+    X - Y
+
+Q3
+
+    X = π first_name, last_name (actors)
+    Y = π first_name, last_name (directors)
+    X ∪ Y
+
+Q4
+
+    X = directors ⨝ id = director_id (movies_directors)
+    Y = X ⨝ movies_directors.movie_id = movies.id (movies)
+    π name movies - π name Y
+
+Q5
+
+    X = π actor_id σ actedMovies < 2 γ actor_id; count(movie_id) -> actedMovies (roles) ⨝ actor_id = id (actors)
+    π first_name, last_name (X)
+
+Q6
+
+🥲

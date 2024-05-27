@@ -1,0 +1,180 @@
+1) FUNCIONARIOS - 3.500 registros
+Tamanho do registro = 11 + 160 + 11 => 182B
+Blocagem = 2048 / 182 => 11
+Quantidade de blocos = 3.500 / 11 => 319
+
+Quantidade de registros no índice primário (CPF) => 319
+Tamanho registro índice primário = 11 + 16 => 27
+Blocagem índice primário = 2048 / 27 => 75
+Quantidade de blocos do arquivo de índice = teto de 319/75 = 5
+Espaço usado por bloco = 75 * 27 = 2025
+Espaço desperdiçado por bloco = 2048 - 2025 = 23
+Espaço total = 5 * 2048 = 10.240
+Quantidade de acessos = log2(5) + 1 => 3 + 1 = 4
+
+Quantidade de registros no índice secundário (CPF_Supervisor) => 3500
+Tamanho registro índice secundário = 11 + 16 => 27
+Blocagem índice secundário = 2048 / 27 => 75
+Quantidade de blocos do arquivo de índice = 3500/75 = 47
+Espaço usado por bloco = 75 * 27 = 2025
+Espaço desperdiçado por bloco = 2048 - 2025 = 23
+Espaço total = 47 * 2048 = 96.256
+Quantidade de acessos = log2(47) + 1 => 6 + 1 = 7
+
+
+2) CLIENTES - 100.000 registros
+Tamanho do registro = 11 + 160 + 200 + 16 + 12 + 1 => 400B
+Blocagem = piso de 2048 / 400 => 5
+Quantidade de blocos = teto de 100.000 / 5 => 20.000
+
+Quantidade de registros no índice primário (CPF) => 20.000
+Tamanho registro índice primário = 11 + 16 => 27
+Blocagem índice primário = 2048 / 27 => 75
+Quantidade de blocos do arquivo de índice = teto de 20.000/75 = 267
+Espaço usado por bloco = 75 * 27 = 2025
+Espaço desperdiçado por bloco = 2048 - 2025 = 23
+Espaço total = 267 * 2048 = 546.816
+Quantidade de acessos = teto de log2(267) + 1 => 9 + 1 = 10
+
+ 
+
+3) ALUGUEL
+Blocagem chave primária => piso de de 2048B / 95B = 21
+Quantidade de blocos chave primária => teto de 909.091 / 21 = 43291       
+Memória utilizada em cada bloco da chave primária => 21 * 95B = 1995B  
+Memória desperdiçada por bloco da chave primária => 2048B - 1995B = 53B
+Memória total gasta chave primária => 43291 * 2048 = 88.659.968B
+Quantidade de acessos para encontrar um registro pela chave primária => teto de log2(43.291) + 1 = 17
+
+Blocagem CPF_Cliente => piso de 2048B / 27B = 75
+Quantidade de blocos CPF_Cliente => teto de 20.000.000 / 75 = 266.667
+Memória utilizada em cada bloco da CPF_Cliente => 75 * 27B = 2025B
+Memória desperdiçada por bloco da CPF_Cliente => 2048B - 2025B = 23B
+Memória total gasta CPF_Cliente => 266.667 * 2048 = 546.134.016B
+Quantidade de acessos para encontrar um registro pela CPF_Cliente => teto de log2(266.667) + 1 = 20
+
+Blocagem ID_Midia => piso de 2048B / 40B = 51
+Quantidade de blocos ID_Midia => teto de 20.000.000 / 51 = 392.157
+Memória utilizada em cada bloco da ID_Midia => 51 * 40B = 2040B
+Memória desperdiçada por bloco da ID_Midia => 2048B - 2040B = 8B
+Memória total gasta ID_Midia => 392.157 * 2048 = 803.137.536B
+Quantidade de acessos para encontrar um registro pela ID_Midia => teto de log2(392.157) + 1 = 20
+
+Blocagem CPF_Funcionario => piso de 2048B / 27B = 75     
+Quantidade de blocos CPF_Funcionario => teto de 20.000.000 / 75 = 266.667
+Memória utilizada em cada bloco da CPF_Funcionario => 75 * 27B = 2025B
+Memória desperdiçada por bloco da CPF_Funcionario => 2048B - 2025B = 23B
+Memória total gasta CPF_Funcionario => 266.667 * 2048 = 546.134.016B
+Quantidade de acessos para encontrar um registro pela CPF_Funcionario => teto de log2(266.667) + 1 = 20
+
+ 
+
+4) MIDIAS - 10.000.000 registros
+Tamanho do registro = 24 + 8 + 24 + 16 => 72B
+Blocagem = piso de 2048 / 72 => 28
+Quantidade de blocos = teto de 10.000.000 / 28 => 277.778
+
+Quantidade de registros no índice primário (Identificador) => 277.778
+Tamanho registro índice primário = 24 + 16 => 40
+Blocagem índice primário = piso de 2048 / 40 => 51
+Quantidade de blocos do arquivo de índice = teto de 277.778/51 = 5447
+Espaço usado por bloco = 51 * 40 = 2040
+Espaço desperdiçado por bloco = 2048 - 2040 = 8
+Espaço total = 5447 * 2048 = 11.155.456
+Quantidade de acessos = teto de log2(5447) + 1 => 13 + 1 = 14
+
+Quantidade de registros no índice secundário (Identificador) => 277.778
+Tamanho registro índice secundário = 16 + 16 => 32
+Blocagem índice secundário = piso de 2048 / 40 => 64
+Quantidade de blocos do arquivo de índice = teto de 277.778/64 = 4.341
+Espaço usado por bloco = 64 * 32 = 2048
+Espaço desperdiçado por bloco = 2048 - 2048 = 0
+Espaço total = 4.341 * 2048 = 8.890.368
+Quantidade de acessos = teto de log2(4.341) + 1 => 13 + 1 = 14
+
+ 
+
+5) PAGAMENTOS - 50.000.000 registros
+Tamanho do registro = 48 + 12 + 24 => 84B
+Blocagem = piso de 2048 / 84 => 24
+Quantidade de blocos = teto de 50.000.000 / 24 => 2.083.333
+
+Quantidade de registros no índice primário (Codigo) => 2.083.333
+Tamanho registro índice primário = 24 + 16 => 40
+Blocagem índice primário = piso de 2048 / 40 => 51
+Quantidade de blocos do arquivo de índice = teto de 277.778/51 = 5447
+Espaço usado por bloco = 51 * 40 = 2040
+Espaço desperdiçado por bloco = 2048 - 2040 = 8
+Espaço total = 5447 * 2048 = 11.155.456
+Quantidade de acessos = teto de log2(5447) + 1 => 13 + 1 = 14
+
+Quantidade de registros no índice secundário (ID_Midia) => 277.778
+Tamanho registro índice secundário = 16 + 16 => 32
+Blocagem índice secundário = piso de 2048 / 40 => 64
+Quantidade de blocos do arquivo de índice = teto de 277.778/64 = 4.341
+Espaço usado por bloco = 64 * 32 = 2048
+Espaço desperdiçado por bloco = 2048 - 2048 = 0
+Espaço total = 4.341 * 2048 = 8.890.368
+Quantidade de acessos = teto de log2(4.341) + 1 => 13 + 1 = 14
+
+Blocagem chave primária => piso de de 2048B / 64B = 32
+Quantidade de blocos chave primária => teto de 3.333.334 / 32 = 104.167     
+Memória utilizada em cada bloco da chave primária => 32 * 64B = 2048B  
+Memória desperdiçada por bloco da chave primária => 2048B - 2048B = 0B 
+Memória total gasta chave primária => 104.167 * 2048 = 213.334.016B
+Quantidade de acessos para encontrar um registro pela chave primária => teto de log2(104.167) + 1 = 18
+
+Blocagem CPF_Cliente => piso de 2048B / 27B = 75
+Quantidade de blocos CPF_Cliente => teto de 50.000.000 / 75 = 666.667
+Memória utilizada em cada bloco da CPF_Cliente => 75 * 27B = 2025B
+Memória desperdiçada por bloco da CPF_Cliente => 2048B - 2025B = 23B
+Memória total gasta CPF_Cliente => 666.667 * 2048 = 1.365.334.016B
+Quantidade de acessos para encontrar um registro pela CPF_Cliente => teto de log2(666.667) + 1 = 21
+
+Blocagem ID_Midia => teto de 2048B / 40B = 51
+Quantidade de blocos ID_Midia = piso de 50.000.000 / 51 = 980.393B
+Memória utilizada em cada bloco da ID_Midia = 51 * 40B = 2040B
+Memória desperdiçada por bloco da ID_Midia => 2048B - 2040B = 8B
+Memória total gasta ID_Midia => 980.393 * 2048 = 2.007.844.864B
+Quantidade de acessos para encontrar um registro pela ID_Midia => teto de log2(980.393) + 1 = 21
+
+Blocagem DataLocacao = piso de 2048B / 28B = 73
+Quantidade de blocos DataLocacao = teto de 50.000.000 / 73 = 684.932
+Memória utilizada em cada bloco de DataLocacao = 73 * 28B = 2044B
+Memória desperdiçada por bloco de DataLocacao = 2048B - 2044B = 4B
+Memória total gasta DataLocacao = 684.932 * 2048 = 1.402.740.736B
+Quantidade de acessos para encontrar um registro pela DataLocacao => teto de log2(684.932) + 1 = 21
+
+ 
+
+6) ATORES - 10.000 registros
+Blocagem chave primária => piso de 2048B / 32B = 64
+Quantidade de blocos chave primária =>  teto de 910 / 64 = 15
+Memória utilizada em cada bloco da chave primária => 64 * 32B = 2048B  
+Memória desperdiçada por bloco da chave primária => 2048B - 2048B = 0B
+Memória total gasta chave primária => 15 * 2048 = 30720B
+Quantidade de acessos para encontrar um registro pela chave primária =>  teto de log2(15) + 1 = 5
+
+ 
+
+7) ATORESEMFILMES - 1.000.000 registros
+Blocagem chave primária => piso de 2048B / 64B = 32B
+Quantidade de blocos chave primária => teto de 15625 / 32 = 489
+Memória utilizada em cada bloco da chave primária => 32 * 64B = 2048B  
+Memória desperdiçada por bloco da chave primária => 2048B - 2048B = 0B 
+Memória total gasta chave primária => 489 * 2048 = 1.001.472B
+Quantidade de acessos para encontrar um registro pela chave primária => teto de log2(489) + 1 = 10
+
+Blocagem chave secundária CodFilme => teto de 2048B / 32B = 64
+Quantidade de blocos chave secundária CodFilme => teto de 1.000.000 / 64 = 15.625
+Memória utilizada em cada bloco da chave secundária CodFilme => 64 * 32B = 2048B
+Memória desperdiçada por bloco da chave secundária CodFilme => 2048B - 2048B = 0B
+Memória total gasta chave secundária CodFilme => 15.625 * 2048 = 32.000.000B
+Quantidade de acessos para encontrar um registro pela chave secundária CodFilme => teto de log2(15.625) + 1 = 15
+
+Blocagem chave secundária CodAtor => teto de 2048B / 32B = 64
+Quantidade de blocos chave secundária CodAtor => teto de 1.000.000 / 64 = 15.625
+Memória utilizada em cada bloco da chave secundária CodAtor => 64 * 32B = 2048B
+Memória desperdiçada por bloco da chave secundária CodAtor => 2048B - 2048B = 0B
+Memória total gasta chave secundária CodAtor => 15625 * 2048 = 32.000.000B
+Quantidade de acessos para encontrar um registro pela chave secundária CodAtor => teto de log2(15.625) + 1 = 15

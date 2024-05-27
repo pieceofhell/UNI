@@ -1,0 +1,50 @@
+Q1.
+
+    SELECT first_name, last_name FROM actors 
+    INTERSECT
+    SELECT first_name, last_name FROM directors
+
+Q2.
+
+    SELECT first_name, last_name FROM actors 
+    EXCEPT
+    SELECT first_name, last_name FROM directors
+
+Q3.
+
+    SELECT first_name, last_name FROM actors 
+    UNION
+    SELECT first_name, last_name FROM directors
+
+Q4.
+
+    SELECT
+        movies.name from movies
+    JOIN
+        (SELECT
+            movies.id FROM movies
+            EXCEPT
+            SELECT
+                movie_id FROM movies_directors) AS filtrated_movies ON movies.id = filtrated_movies.id
+
+Q5.
+
+    SELECT first_name || ' ' || last_name AS actor_name FROM actors INNER JOIN (
+    SELECT id FROM actors
+    EXCEPT
+    SELECT roles.actor_id FROM
+    ( SELECT actor_id, COUNT(movie_id) AS movie_total FROM roles GROUP BY actor_id HAVING movie_total > 1 ) AS roles ) AS alldudes ON actors.id = alldudes.id
+
+Q6.
+
+    SELECT genre, year, filtered_ids
+            FROM (
+            SELECT genre, movie_id, filtered_ids
+            FROM (
+                SELECT movie_id as innermovie_id, COUNT(actor_id) as filtered_ids
+                FROM roles
+                GROUP BY movie_id
+                ) AS mov NATURAL JOIN movies_genres
+            WHERE filtered_ids < 2 AND innermovie_id = movie_id
+        ) AS filtered_actors NATURAL JOIN movies
+    WHERE movie_id = id
