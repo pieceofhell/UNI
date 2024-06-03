@@ -48,7 +48,7 @@ public class Prateleira<T> {
     System.out.println(shelf.toString());
   }
 }
-// Path: LP/Item.java
+
 class Item {
   private String name;
   private String description;
