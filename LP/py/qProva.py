@@ -30,9 +30,9 @@ def alunoManager(alunos, aprovacao, alunoAtual=0):
     
     return alunoManager(alunos, aprovacao, alunoAtual + 1)
 
-aluno = [(68, 2, 78), (70, 0, 89), (68, 16, 48), (72, 4, 80)]
-qtdAlunos = len(aluno)
-aprovacoes = alunoManager(aluno, (0, 0, 0))
+alunos = [(68, 2, 78), (70, 0, 89), (68, 16, 48), (72, 4, 80)]
+qtdAlunos = len(alunos)
+aprovacoes = alunoManager(alunos, (0, 0, 0))
 
 print(aprovacoes)
 
