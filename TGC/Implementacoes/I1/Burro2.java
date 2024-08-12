@@ -10,14 +10,12 @@ public class Burro {
 
   ArrayList<Integer> firstColumn;
   ArrayList<Integer> secondColumn;
-  LinkedList<Integer>[] vertices;
 
   Burro() {
     this.numVertices = 0;
     this.numEdges = 0;
     this.firstColumn = new ArrayList<>();
     this.secondColumn = new ArrayList<>();
-    this.vertices = new LinkedList[1];
   }
 
   public static void main(String[] args) {
@@ -31,15 +29,33 @@ public class Burro {
 
       int[] heads = g.secondColumn.stream().mapToInt(i -> i).toArray();
 
+      int num = 8;
+
+      int targetIndex = findTargetIndex(num, tails);
+
+      int numSuccessors = findNumSuccessors(targetIndex, tails);
+
+      System.out.println(
+        "Existem " + numSuccessors + " sucessores ao vertice de numero " + num
+      );
+
+      int[] successors = findSuccessors(
+        targetIndex,
+        numSuccessors,
+        tails,
+        heads
+      );
+
+      System.out.println("Seus sucessores sao:");
+      System.out.println("Sucessor 1 : " + heads[targetIndex]);
+      for (int i = 0; i < numSuccessors; i++) {
+        System.out.println(successors[i]);
+      }
+
+      
     } catch (IOException e) {
       e.printStackTrace();
     }
-
-    // Teste();
-
-    
-
-
   }
 
   /**
@@ -68,13 +84,6 @@ public class Burro {
           secondColumn.add(Integer.parseInt(numbers[1]));
         }
       }
-      vertices = new LinkedList[numVertices]; // alocacao de espaco necessario para preenchimento da array de linked lists
-    }
-  }
-
-  public void fill(){
-    for (int i = 0; i < vertices.length; i++) {
-      
     }
   }
 
@@ -120,26 +129,6 @@ public class Burro {
     }
 
     return succ;
-  }
-
-  public static void Teste() {
-    int num = 8;
-
-    int targetIndex = findTargetIndex(num, tails);
-
-    int numSuccessors = findNumSuccessors(targetIndex, tails);
-
-    System.out.println(
-      "Existem " + numSuccessors + " sucessores ao vertice de numero " + num
-    );
-
-    int[] successors = findSuccessors(targetIndex, numSuccessors, tails, heads);
-
-    System.out.println("Seus sucessores sao:");
-    System.out.println("Sucessor 1 : " + heads[targetIndex]);
-    for (int i = 0; i < numSuccessors; i++) {
-      System.out.println(successors[i]);
-    }
   }
   //   public static void readFile(String filePath) throws IOException {
   //     int numVertices = 0;
