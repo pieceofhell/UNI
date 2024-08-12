@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
-public class GraphFileReader {
+public class Burro {
 
   int numVertices;
   int numEdges;
@@ -10,7 +10,7 @@ public class GraphFileReader {
   ArrayList<Integer> firstColumn;
   ArrayList<Integer> secondColumn;
 
-  GraphFileReader() {
+  Burro() {
     this.numVertices = 0;
     this.numEdges = 0;
     this.firstColumn = new ArrayList<>();
@@ -20,7 +20,7 @@ public class GraphFileReader {
   public static void main(String[] args) {
     String filePath =
       "C:/Users/henri/code/github/UNI/TGC/Implementacoes/I1/graph-test-100-1.txt";
-    GraphFileReader g = new GraphFileReader();
+    Burro g = new Burro();
     try {
       g.read(filePath);
 
@@ -28,15 +28,28 @@ public class GraphFileReader {
 
       int[] heads = g.secondColumn.stream().mapToInt(i -> i).toArray();
 
-      int targetIndex = findTargetIndex(8, tails);
+      int num = 8;
 
-      System.out.println(tails[targetIndex] + "\n");
-      System.out.println(heads[targetIndex] + "\n");
+      int targetIndex = findTargetIndex(num, tails);
 
-      int test = findNumSuccessors(targetIndex, tails);
+      int numSuccessors = findNumSuccessors(targetIndex, tails);
 
-      System.err.println(test);
-      // System.out.println("SUCESSOR 1: " + heads[targetIndex]);
+      System.out.println(
+        "Existem " + numSuccessors + " sucessores ao vertice de numero " + num
+      );
+
+      int[] successors = findSuccessors(
+        targetIndex,
+        numSuccessors,
+        tails,
+        heads
+      );
+
+      System.out.println("Seus sucessores sao:");
+      System.out.println("Sucessor 1 : " + heads[targetIndex]);
+      for (int i = 0; i < numSuccessors; i++) {
+        System.out.println(successors[i]);
+      }
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -98,12 +111,19 @@ public class GraphFileReader {
     return numSuccessors;
   }
 
-  public static ArrayList findSuccessors(int target, int[] tails, int[] heads){
-    ArrayList succ = new ArrayList<>();
+  public static int[] findSuccessors(
+    int index,
+    int numSuccessors,
+    int[] tails,
+    int[] heads
+  ) {
+    int[] succ = new int[numSuccessors];
 
-    int targetIndex = findTargetIndex(target, tails);
-
-    
+    int j = 0;
+    for (int i = index; j < numSuccessors; i++) {
+      succ[j] = heads[i];
+      j++;
+    }
 
     return succ;
   }

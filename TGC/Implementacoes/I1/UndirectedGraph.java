@@ -1,9 +1,9 @@
-class Graph {Undirected {
+public class UndirectedGraph {
     private int[][] adjacencyMatrix;
     private int numVertices;
 
     // Constructor to initialize the graph with a specific number of vertices
-    public Undirected(int numVertices) {
+    public Graph(int numVertices) {
         this.numVertices = numVertices;
         adjacencyMatrix = new int[numVertices][numVertices];
     }
@@ -13,6 +13,13 @@ class Graph {Undirected {
         if (i >= 0 && i < numVertices && j >= 0 && j < numVertices) {
             adjacencyMatrix[i][j] = 1;
             adjacencyMatrix[j][i] = 1; // For undirected graph
+        }
+    }
+
+    public void addDirectedEdge(int i, int j){
+        if (i >= 0 && i < numVertices && j >= 0 && j < numVertices) {
+            adjacencyMatrix[i][j] = 1;
+            adjacencyMatrix[j][i] = -1; // For directed graph
         }
     }
 
@@ -38,9 +45,19 @@ class Graph {Undirected {
 
     public static void main(String[] args) {
         int numVertices = 5;
-        Undirected graph = new Undirected
+        Undirected graph = new Undirected(numVertices);
 
-    // Print the graph
-    graph.printGraph();
-  }
+        // Adding edges
+        graph.addEdge(0, 1);
+        graph.addEdge(0, 4);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 4);
+
+        // Print the graph
+        System.out.println("Adjacency Matrix:");
+        graph.printGraph();
+    }
 }
