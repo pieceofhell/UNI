@@ -3,7 +3,7 @@ public class UndirectedGraph {
     private int numVertices;
 
     // Constructor to initialize the graph with a specific number of vertices
-    public Graph(int numVertices) {
+    public UndirectedGraph(int numVertices) {
         this.numVertices = numVertices;
         adjacencyMatrix = new int[numVertices][numVertices];
     }
@@ -45,7 +45,7 @@ public class UndirectedGraph {
 
     public static void main(String[] args) {
         int numVertices = 5;
-        Undirected graph = new Undirected(numVertices);
+        UndirectedGraph graph = new UndirectedGraph(numVertices);
 
         // Adding edges
         graph.addEdge(0, 1);
