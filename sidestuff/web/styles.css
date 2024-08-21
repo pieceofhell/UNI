@@ -1,0 +1,102 @@
+/* styles.css */
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  font-family: "Satoshi", sans-serif;
+}
+
+header {
+  text-align: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 10px 0;
+  background-color: #f0f0f0;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  CHANGE THIS VALUE TO SEE HEADER SPACE*/
+  z-index: 1000;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 6vh;
+  display: flex;
+  justify-content: center;
+  gap: 10vw;
+  font-size: 2.5vh;
+}
+
+nav ul li {
+  display: inline;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: text-decoration 3s;
+}
+
+nav ul li a:hover:after {
+  width: 100%;
+  text-decoration: underline overline;
+}
+
+nav ul li a:after {
+  content: "";
+  width: 0px;
+  height: 3px;
+  display: block;
+  background: black;
+  transition: 300ms;
+}
+
+.section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column; /* Add this line to stack children vertically */
+  justify-content: center;
+  align-items: center;
+  scroll-snap-align: start;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 6em;
+  color: #333;
+}
+
+#home {
+  background-color: red;
+}
+
+#about {
+  background-color: blue;
+  text-align: center;
+}
+
+#projects {
+  background-color: green;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2em;
+  }
+
+  p {
+    font-size: 1em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+}
