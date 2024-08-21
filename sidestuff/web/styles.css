@@ -18,15 +18,20 @@ header {
   top: 0;
   width: 100%;
   padding: 10px 0;
-  background-color: #f0f0f0;
+  background-color: rgba(0, 0, 0, 0);
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  CHANGE THIS VALUE TO SEE HEADER SPACE*/
+  transition: top 0.3s;
   z-index: 1000;
+}
+
+.hidden {
+  top: -1000px; /* Adjust this value based on your header height */
 }
 
 nav ul {
   list-style-type: none;
   margin: 0;
-  padding: 6vh;
+  padding: 4vh;
   display: flex;
   justify-content: center;
   gap: 10vw;
@@ -74,6 +79,21 @@ h1 {
   color: #333;
 }
 
+.centered-section {
+  text-align: center;
+}
+
+.centered-section h1 {
+  display: block;
+  margin: 0 auto;
+}
+
+.centered-section p {
+  display: block;
+  margin: 0 auto;
+  max-width: 600px; /* Optional: to limit the width of the paragraph */
+}
+
 #home {
   background-color: red;
 }
@@ -89,7 +109,7 @@ h1 {
 
 @media (max-width: 768px) {
   h1 {
-    font-size: 2em;
+    font-size: 3em;
   }
 
   p {
