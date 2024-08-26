@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class MainGraph {
 
@@ -12,7 +13,8 @@ public class MainGraph {
   ArrayList<Integer> secondColumn;
   LinkedList<Integer>[] vertices;
 
-  // Construtor (potencialmente faltando inicializacao dos vertices, mas precisaria do numero de vertices)
+  // Construtor (potencialmente faltando inicializacao dos vertices, mas
+  // precisaria do numero de vertices)
   MainGraph() {
     this.numVertices = 0;
     this.numEdges = 0;
@@ -34,13 +36,13 @@ public class MainGraph {
       e.printStackTrace();
     }
 
-    // g.lastVertice(); // Debug
-
     g.fillGraph();
-    g.printGraph();
+    // g.printGraph(); // Debug
 
+    g.printSuccessors(5);
     // System.out.println("Teste 1: ");
-    // Teste(1, g.firstColumn.stream().mapToInt(i -> i).toArray(), g.secondColumn.stream().mapToInt(i -> i).toArray());
+    // Teste(1, g.firstColumn.stream().mapToInt(i -> i).toArray(),
+    // g.secondColumn.stream().mapToInt(i -> i).toArray());
 
     // System.out.println(g.vertices[0].get(0));
   }
@@ -58,15 +60,19 @@ public class MainGraph {
         }
       }
 
-      System.out.println(
-        "Numero de vertices: " + numVertices + " Numero de arestas: " + numEdges
-      ); // Debug
+      // System.out.println(
+      //   "Numero de vertices: " + numVertices + " Numero de arestas: " + numEdges
+      // ); // Debug - exibe numero de vertices e arestas
 
-      // Opcional; Inicialização da lista de adjacência
-      this.vertices = new LinkedList[numVertices+1]; // +1 para evitar problemas com o indice 0
-      // vale notar tambem que o indice 0 não é utilizado, pois o grafo começa no vertice 1
+      // Inicialização da lista de adjacência
+      this.vertices = new LinkedList[numVertices + 1];
+
+      // +1 para evitar problemas com o indice 0
+      // vale notar tambem que o indice 0 não é utilizado, pois o grafo começa no
+      // vertice 1
       // e vai até o vertice numVertices
-      // por que isso acontece? porque o arquivo de entrada começa a contar os vertices a partir do 1
+      // por que isso acontece? porque o arquivo de entrada começa a contar os
+      // vertices a partir do 1
       // e não do 0
 
       for (int i = 1; i <= numVertices; i++) {
@@ -92,21 +98,21 @@ public class MainGraph {
     vertices[tails].remove(heads);
   }
 
-  // Preenche o grafo (array de linked lists - vertices) com as arestas do arquivo guardado nas arrays
+  // Preenche o grafo (array de linked lists - vertices) com as arestas do arquivo
+  // guardado nas arrays
   public void fillGraph() {
     for (int i = 0; i < firstColumn.size(); i++) {
-      System.out.println(firstColumn.get(i) + " " + secondColumn.get(i)); // Debug
+      // System.out.println(firstColumn.get(i) + " " + secondColumn.get(i)); // Debug
       addEdge(firstColumn.get(i), secondColumn.get(i));
     }
   }
 
-  public void lastVertice() {
-    System.out.println(
-      firstColumn.get(firstColumn.size() - 5) +
-      " " +
-      secondColumn.get(firstColumn.size() - 5)
-    ); 
-  } // Debug
+  public void fillGraph(int[] tails, int[] heads) {
+    for (int i = 0; i < tails.length; i++) {
+      // System.out.println(tails[i] + " " + heads[i]); // Debug
+      addEdge(tails[i], heads[i]);
+    }
+  }
 
   // Imprime o grafo
   public void printGraph() {
@@ -119,6 +125,15 @@ public class MainGraph {
     }
   }
 
+  // Imprime os sucessores de um vertice
+  public void printSuccessors(int vertice) {
+    System.out.println("Sucessores do vertice " + vertice + ":");
+    for (Integer adjacente : vertices[vertice]) {
+      System.out.println(adjacente);
+    }
+  }
+
+  // Encontra o indice do vertice alvo (dentro da array dada)
   public static int findTargetIndex(int target, int array[]) {
     int index = -1;
     for (int i = 0; i < array.length; i++) {
@@ -130,6 +145,7 @@ public class MainGraph {
     return index;
   }
 
+  // Encontra o numero de sucessores do vertice alvo (dentro da array dada)
   public static int findNumSuccessors(int targetIndex, int array[]) {
     int numSuccessors = 1;
     for (int i = targetIndex; i < array.length - 1; i++) {
@@ -142,6 +158,7 @@ public class MainGraph {
     return numSuccessors;
   }
 
+  // Encontra os sucessores do vertice alvo (dentro da array dada)
   public static int[] findSuccessors(
     int index,
     int numSuccessors,
@@ -157,6 +174,7 @@ public class MainGraph {
     return succ;
   }
 
+  // Teste
   public static void Teste(int num, int[] tails, int[] heads) {
     int targetIndex = findTargetIndex(num, tails);
     int numSuccessors = findNumSuccessors(targetIndex, tails);
