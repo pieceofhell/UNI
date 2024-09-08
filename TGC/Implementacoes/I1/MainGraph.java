@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Scanner;
 
 public class MainGraph {
@@ -25,14 +24,15 @@ public class MainGraph {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     // Caso esteja no notebook
-    String filePath1 =
-      "C:/Users/henri/code/github/UNI/TGC/Implementacoes/I1/graph-test-100-1.txt";
-    // Caso esteja no desktop
-    String filePath2 =
-      "D:/gaming/site inovador/code/github/UNI/TGC/Implementacoes/I1/graph-test-100-1.txt";
+    // String filePath1 =
+    //   "C:/Users/henri/code/github/UNI/TGC/Implementacoes/I1/graph-test-100-1.txt";
+    // // Caso esteja no desktop
+    // String filePath2 =
+    //   "D:/gaming/site inovador/code/github/UNI/TGC/Implementacoes/I1/graph-test-100-1.txt";
+    String filePathUser = sc.nextLine();
     MainGraph g = new MainGraph();
     try {
-      g.read(filePath2);
+      g.read(filePathUser);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -162,7 +162,7 @@ public class MainGraph {
         count++;
       }
     }
-    System.out.println("Grau do entrada do vertice " + vertice + ": " + count);
+    System.out.println("Grau de entrada do vertice " + vertice + ": " + count);
   }
 
   public void printExitDegree(int vertice) {

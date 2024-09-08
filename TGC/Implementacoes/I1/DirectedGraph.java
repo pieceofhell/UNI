@@ -1,4 +1,4 @@
-public public class DirectedGraph {
+public class DirectedGraph {
     private int[][] adjacencyMatrix;
     private int numVertices;
 
@@ -29,6 +29,11 @@ public public class DirectedGraph {
 
         // Print the graph
         System.out.println("Adjacency Matrix:");
-        graph.printGraph();
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                System.out.print(graph.adjacencyMatrix[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }
