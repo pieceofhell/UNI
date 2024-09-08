@@ -80,9 +80,7 @@ void main() {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // Add sign in logic here
-              },
+              onPressed: () {},
               child: const Text('ENTRAR'),
             ),
             const SizedBox(height: 20),
@@ -97,9 +95,7 @@ void main() {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    // Add forgot password logic here
-                  },
+                  onPressed: () {},
                   child: const Text('Cadastre-se'),
                 ),
               ],
