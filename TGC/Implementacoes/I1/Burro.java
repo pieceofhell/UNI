@@ -20,6 +20,8 @@ public class Burro {
   public static void main(String[] args) {
     String filePath =
       "C:/Users/henri/code/github/UNI/TGC/Implementacoes/I1/graph-test-100-1.txt";
+    String filePath2 = 
+    "D:/gaming/site inovador/code/github/UNI/TGC/files/graph-test-100-1.txt";
     Burro g = new Burro();
     try {
       g.read(filePath);

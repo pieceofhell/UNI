@@ -21,39 +21,6 @@ public class MainGraph {
     this.secondColumn = new ArrayList<>();
   }
 
-  public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-    // Caso esteja no notebook
-    // String filePath1 =
-    //   "C:/Users/henri/code/github/UNI/TGC/Implementacoes/I1/graph-test-100-1.txt";
-    // // Caso esteja no desktop
-    // String filePath2 =
-    //   "D:/gaming/site inovador/code/github/UNI/TGC/Implementacoes/I1/graph-test-100-1.txt";
-    String filePathUser = sc.nextLine();
-    MainGraph g = new MainGraph();
-    try {
-      g.read(filePathUser);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-    g.fillGraph();
-    // g.printGraph(); // Para debug
-
-    // dumbTeste(1, g.firstColumn.stream().mapToInt(i -> i).toArray(), g.secondColumn.stream().mapToInt(i -> i).toArray());
-
-    int verticeEscolhido = sc.nextInt();
-
-    // Implementacao 1
-    g.Implementacao1(verticeEscolhido);
-    /**
-     * Orientação: Seu programa deverá ler o conteúdo do arquivo e representar o grafo direcionado em memória utilizando uma das estruturas discutidas em nossas aulas. Depois disso, sua implementação deve utilizar a estrutura escolhida para produzir as seguintes informações para o vértice informado pelo usuário: (i) grau de saída; (ii) grau de entrada; (iii) conjunto de sucessores; e (iv) conjunto de predecessores. OBS.: É necessário produzir tais informações apenas para o vértice informado.
-     */
-
-    // System.out.println(g.vertices[0].get(0));
-    sc.close();
-  }
-
   public void Implementacao1(int vertice) {
     printExitDegree(vertice);
     printEntryDegree(vertice);
@@ -233,5 +200,38 @@ public class MainGraph {
     for (int i = 0; i < numSuccessors; i++) {
       System.out.println(successors[i]);
     }
+  }
+
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    // Caso esteja no notebook
+    // String filePath1 =
+    //   "C:/Users/henri/code/github/UNI/TGC/Implementacoes/I1/graph-test-100-1.txt";
+    // // Caso esteja no desktop
+    // String filePath2 =
+    //   "D:/gaming/site inovador/code/github/UNI/TGC/files/graph-test-100-1.txt";
+    String filePathUser = sc.nextLine();
+    MainGraph g = new MainGraph();
+    try {
+      g.read(filePathUser);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    g.fillGraph();
+    // g.printGraph(); // Para debug
+
+    // dumbTeste(1, g.firstColumn.stream().mapToInt(i -> i).toArray(), g.secondColumn.stream().mapToInt(i -> i).toArray());
+
+    int verticeEscolhido = sc.nextInt();
+
+    // Implementacao 1
+    g.Implementacao1(verticeEscolhido);
+    /**
+     * Orientação: Seu programa deverá ler o conteúdo do arquivo e representar o grafo direcionado em memória utilizando uma das estruturas discutidas em nossas aulas. Depois disso, sua implementação deve utilizar a estrutura escolhida para produzir as seguintes informações para o vértice informado pelo usuário: (i) grau de saída; (ii) grau de entrada; (iii) conjunto de sucessores; e (iv) conjunto de predecessores. OBS.: É necessário produzir tais informações apenas para o vértice informado.
+     */
+
+    // System.out.println(g.vertices[0].get(0));
+    sc.close();
   }
 }
