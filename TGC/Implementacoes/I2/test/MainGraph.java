@@ -21,13 +21,6 @@ public class MainGraph {
     this.secondColumn = new ArrayList<>();
   }
 
-  public void Implementacao1(int vertice) {
-    printExitDegree(vertice);
-    printEntryDegree(vertice);
-    printSuccessors(vertice);
-    printPredecessors(vertice);
-  }
-
   public void read(String filePath) throws IOException {
     try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
       String line;
@@ -103,6 +96,16 @@ public class MainGraph {
     }
   }
 
+  public int[] getAdjacents(int vertice) {
+    int[] adjacents = new int[vertices[vertice].size()];
+    int i = 0;
+    for (Integer adjacente : vertices[vertice]) {
+      adjacents[i] = adjacente;
+      i++;
+    }
+    return adjacents;
+  }
+
   // Imprime os sucessores de um vertice
   public void printSuccessors(int vertice) {
     System.out.println("Sucessores do vertice " + vertice + ":");
@@ -138,6 +141,13 @@ public class MainGraph {
     );
   }
 
+  public void Implementacao1(int vertice) {
+    printExitDegree(vertice);
+    printEntryDegree(vertice);
+    printSuccessors(vertice);
+    printPredecessors(vertice);
+  }
+
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     // Caso esteja no notebook
@@ -150,7 +160,7 @@ public class MainGraph {
       "D:/gaming/site inovador/code/github/UNI/TGC/files/graph-test-6-1.txt";
     String filePath4 =
       "D:/gaming/site inovador/code/github/UNI/TGC/files/graph-test-smart.txt";
-    String userFilePath = sc.nextLine();
+    // String userFilePath = sc.nextLine();
     MainGraph g = new MainGraph();
     try {
       g.read(filePath4);
@@ -161,18 +171,15 @@ public class MainGraph {
     g.fillGraph();
     // g.printGraph(); // Para debug
 
-    int verticeEscolhido = sc.nextInt();
+    // int verticeEscolhido = sc.nextInt();
 
     // Implementacao 1
     // g.Implementacao1(verticeEscolhido);
-    System.out.println();
-
-    // System.out.println(g.vertices[0].get(0));
 
     // Implementacao 2
-    DepthFirstSearch dfs = new DepthFirstSearch(g);
-    dfs.depthFirstSearch();
-    dfs.printVerticeEdges(verticeEscolhido);
+    DepthFirstSearch dfs = new DepthFirstSearch(g.numVertices);
+    dfs.depthFirstSearch(g);
+    dfs.printTimes();
     sc.close();
   }
 }
