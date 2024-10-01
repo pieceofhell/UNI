@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "ArticulationsAndBridges",
+      "request": "launch",
+      "mainClass": "TPs.ArticulationsAndBridges",
+      "projectName": "TGC_8f02dfc"
+    },
+    {
+      "type": "java",
+      "name": "MainGraph",
+      "request": "launch",
+      "mainClass": "MainGraph",
+      "projectName": "TGC_8f02dfc"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": ".",
+      "program": "build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
