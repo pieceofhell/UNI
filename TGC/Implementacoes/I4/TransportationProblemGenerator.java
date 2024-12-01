@@ -1,3 +1,5 @@
+package I4;
+
 import java.io.*;
 import java.util.Random;
 

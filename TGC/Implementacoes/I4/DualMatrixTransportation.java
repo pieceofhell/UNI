@@ -1,14 +1,27 @@
-import java.util.*;
+package I4;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Main class for the dual matrix transportation problem
+ */
 public class DualMatrixTransportation {
 
-  private int m, n; // Número de nós de oferta e demanda
-  private int[][] costMatrix; // Matriz de custos
-  private int[] supply; // Vetor de oferta
-  private int[] demand; // Vetor de demanda
-  private double[][] D; // Matriz Dual
-  private double psi; // Objetivo atual
-  private List<int[]> basicCells; // Conjunto básico
+  private int[][] costMatrix;
+  private int[] supply, demand, A, leavingCell, enteringCell;
+  private double[] u, v, Q, P;
+  public double[] Y;
+  public double psi;
+  private List<int[]> basicCells, virtualCells, gammaCellSet;
+  public double[][] T, theta, dMatrix;
+  private int m, n, k, s, t;
+  private int thetast;
+  private boolean isOptimal;
+  private long startTime;
+  private long endTime;
+  public long executionTime;
 
   public DualMatrixTransportation(
     int m,
@@ -22,249 +35,395 @@ public class DualMatrixTransportation {
     this.costMatrix = costMatrix;
     this.supply = supply;
     this.demand = demand;
-    this.D = new double[m + n][m + n]; // Tamanho estendido para virtual cells
+    this.u = new double[m];
+    this.v = new double[n];
+    this.A = new int[m + n];
+    this.dMatrix = new double[m + n][m + n];
     this.basicCells = new ArrayList<>();
+    this.virtualCells = new ArrayList<>();
+    this.gammaCellSet = new ArrayList<>();
+    this.Y = new double[m + n];
+    this.isOptimal = false;
+    this.leavingCell = new int[2];
+    this.enteringCell = new int[2];
+    theta = new double[m][n];
+    T = new double[m + n][2];
+    Q = new double[n];
+    P = new double[m];
+    thetast = 0;
+    s = 0;
+    t = 0;
   }
 
-  // Step 0: Initialization
-  public void initialize() {
-    // Inicializa u, v e valores básicos
-    double[] u = new double[m]; // Dual variables for supply
-    double[] v = new double[n]; // Dual variables for demand
-
-    Arrays.fill(u, 0); // Inicializar u como 0
-
-    // Calcular vj como o custo mínimo da coluna j
-    for (int j = 0; j < n; j++) {
-      int minCost = Integer.MAX_VALUE;
-      int selectedCol = -1;
-
-      for (int i = 0; i < m; i++) {
-        if (costMatrix[i][j] < minCost) {
-          minCost = costMatrix[i][j];
-          selectedCol = i;
-        }
-      }
-      v[j] = minCost;
-      basicCells.add(new int[] { selectedCol, j }); // Armazena células básicas iniciais
-      // printing all basic cells
-      System.out.println("Basic cell: (" + selectedCol + ", " + j + ")");
-    }
-
-    // Prepara as virtual cells
-    for (int i = 0; i < m; i++) {
-      basicCells.add(new int[] { i, -1 }); // Virtual cells (m, 0)
-    }
-
-    // Calcula valor inicial do objetivo
-    psi = calculateObjective(u, v);
-  }
-
-  private double calculateObjective(double[] u, double[] v) {
-    double result = 0;
-
-    for (int j = 0; j < n; j++) {
-      result += demand[j] * v[j];
-    }
-    for (int i = 0; i < m; i++) {
-      result -= supply[i] * u[i];
-    }
-    return result;
-  }
-
-  // Step 1: Determination of the leaving cell
-  public boolean determineLeavingCell() {
-    double[] Y = computeY();
-    int leavingIndex = -1;
-    double minY = Double.MAX_VALUE;
-
-    for (int i = 0; i < Y.length; i++) {
-      if (Y[i] < minY) {
-        minY = Y[i];
-        leavingIndex = i;
-      }
-    }
-
-    if (minY >= 0) {
-      System.out.println("Optimal solution found!");
-      return true; // Solução ótima
-    }
-
-    // Remove a célula correspondente
-    int[] leavingCell = basicCells.get(leavingIndex);
-    basicCells.remove(leavingIndex);
-
-    return false;
-  }
-
-  private double[] computeY() {
-    double[] A = new double[m + n];
-    // Preenche A conforme o passo 0.1
+  // Step 0.1: Initialize vector A
+  private int[] initializeA() {
+    int[] A = new int[m + n];
     for (int i = 0; i < n; i++) {
-      // System.out.println("demand[i]: " + demand[i]);
       A[i] = demand[i];
     }
     for (int i = 0; i < m; i++) {
-      // System.out.println("supply[i]: " + -supply[i]);
       A[n + i] = -supply[i];
     }
-    // Calcula Y = AD
-    double[] Y = new double[m + n];
-    for (int i = 0; i < m + n; i++) {
-      Y[i] = 0;
-      for (int j = 0; j < m + n; j++) {
-        Y[i] += A[j] * D[j][i];
+    return A;
+  }
+
+  // Step 0.2: Initialize u and compute v
+  private void initializeUAndComputeV() {
+    Arrays.fill(u, 0); // u_i = 0
+    for (int j = 0; j < n; j++) {
+      v[j] = Double.POSITIVE_INFINITY;
+      for (int i = 0; i < m; i++) {
+        v[j] = Math.min(v[j], costMatrix[i][j]);
       }
     }
-    System.out.println("Y: " + Arrays.toString(Y));
+  }
+
+  // Step 0.3: Define basic cell set
+  private void defineBasicCellSet() {
+    for (int j = 0; j < n; j++) {
+      int minIndex = 0;
+      for (int i = 1; i < m; i++) {
+        if (costMatrix[i][j] < costMatrix[minIndex][j]) {
+          minIndex = i;
+        }
+      }
+      basicCells.add(new int[] { minIndex, j });
+    }
+    for (int i = 0; i < m; i++) {
+      virtualCells.add(new int[] { i, 0 });
+    }
+
+    // System.out.println("Basic cells: ");
+    // for (int[] cell : basicCells) {
+    //   System.out.println(Arrays.toString(cell));
+    // }
+
+    // System.out.println("Virtual cells: ");
+
+    // for (int[] cell : virtualCells) {
+    //   System.out.println(Arrays.toString(cell));
+    // }
+
+    gammaCellSet.addAll(basicCells);
+    gammaCellSet.addAll(virtualCells);
+    // System.out.println("Gamma cell set: ");
+    // for (int[] cell : gammaCellSet) {
+    //   System.out.println(Arrays.toString(cell));
+    // }
+  }
+
+  // Step 0.4: Compute objective function psi
+  private void computeObjectiveFunction() {
+    psi = 0;
+    for (int[] cell : basicCells) {
+      int j = cell[1];
+      psi += demand[j] * v[j];
+    }
+
+    for (int i = 0; i < m; i++) {
+      psi -= supply[i] * u[i];
+    }
+  }
+
+  // Step 1: Determine the leaving cell
+  private void determineLeavingCell() {
+    // Step 1.1: Compute Y = A * D
+    Y = computeYVector();
+
+    // System.out.println("Vector Y (A * D): " + Arrays.toString(Y));
+
+    // Step 1.2: Find the smallest value in Y
+    int leavingIndex = -1;
+    double smallestY = Double.MAX_VALUE;
+    for (int k = 0; k < Y.length; k++) {
+      if (Y[k] < smallestY) {
+        smallestY = Y[k];
+        leavingIndex = k;
+      }
+    }
+
+    // System.out.println(
+    //   "Smallest value in Y: " + smallestY + " at index " + leavingIndex
+    // );
+
+    // Step 1.3: Check optimality or determine leaving cell
+    if (smallestY >= 0) {
+      // System.out.println("Solution is optimal.");
+      // System.out.println("Dual and primal solutions are optimal.");
+      isOptimal = true;
+    } else {
+      // System.out.println("Leaving cell identified:");
+      // System.out.println("Index in Gamma: " + leavingIndex);
+      int[] leavingCell = gammaCellSet.get(leavingIndex);
+      // System.out.println(
+      //   "Cell coordinates: (" + leavingCell[0] + ", " + leavingCell[1] + ")"
+      // );
+      this.leavingCell = leavingCell; // Store the leaving cell
+    }
+  }
+
+  // Step 1.1: Compute Y = A * D
+  private double[] computeYVector() {
+    double[] Y = new double[dMatrix[0].length];
+    for (int j = 0; j < dMatrix[0].length; j++) {
+      Y[j] = 0.0;
+      for (int i = 0; i < dMatrix.length; i++) {
+        Y[j] += A[i] * dMatrix[i][j];
+      }
+    }
     return Y;
   }
 
-  // Step 2: Determination of the entering cell
-  public void determineEnteringCell() {
-    // Calcula os vetores Q e P
-    double[] Q = new double[n];
-    double[] P = new double[m];
-
-    for (int j = 0; j < n; j++) {
-      Q[j] = D[j][basicCells.size()]; // Coluna correspondente a k em D
-    }
-    for (int i = 0; i < m; i++) {
-      P[i] = D[n + i][basicCells.size()]; // Coluna correspondente a k em D
-    }
-
-    // Determina θ para células não-básicas
-    double minTheta = Double.MAX_VALUE;
-    int enteringRow = -1, enteringCol = -1;
+  private void constructDMatrix() {
+    int[] minOfColumnIndex = new int[n];
 
     for (int i = 0; i < m; i++) {
-      for (int j = 0; j < n; j++) {
-        if (!isBasicCell(i, j)) { // Ignora células básicas
-          double piMinusQj = P[i] - Q[j];
-          if (piMinusQj <= 0) {
-            System.out.println(
-              "Problema dual não limitado; solução primal inviável."
-            );
-            return; // Parar se o problema não é viável
-          }
-          double theta = costMatrix[i][j] + P[i] - Q[j];
-          if (theta < minTheta) {
-            minTheta = theta;
-            enteringRow = i;
-            enteringCol = j;
-          }
+      u[i] = 0;
+    }
+    for (int i = 0; i < n; i++) {
+      int minOfColumn = costMatrix[0][i];
+      minOfColumnIndex[i] = 0;
+      for (int j = 1; j < m; j++) {
+        if (costMatrix[j][i] < minOfColumn) {
+          minOfColumn = costMatrix[j][i];
+          minOfColumnIndex[i] = j;
+        }
+      }
+      v[i] = minOfColumn;
+    }
+
+    for (int i = 0; i < n; i++) {
+      T[i][0] = minOfColumnIndex[i] + 1;
+      T[i][1] = i + 1;
+    }
+    for (int i = n; i < m + n; i++) {
+      T[i][0] = i - n + 1;
+      T[i][1] = 0;
+    }
+
+    // System.out.println("Matrix T:");
+    // for (double[] row : T) {
+    //   System.out.println(Arrays.toString(row));
+    // }
+
+    for (int i = 0; i < m + n; i++) {
+      for (int j = 0; j < m + n; j++) {
+        if (i == j && i < n) {
+          dMatrix[i][j] = 1;
+        } else if (i < n && j == n + minOfColumnIndex[i]) {
+          dMatrix[i][j] = -1;
+        } else if (i == j && i >= n) {
+          dMatrix[i][j] = -1;
+        } else {
+          dMatrix[i][j] = 0;
         }
       }
     }
-
-    // Atualiza a célula de entrada
-    if (enteringRow != -1 && enteringCol != -1) {
-      basicCells.add(new int[] { enteringRow, enteringCol });
-      System.out.println(
-        "Célula de entrada adicionada: (" +
-        enteringRow +
-        ", " +
-        enteringCol +
-        ")"
-      );
-    }
   }
 
-  private boolean isBasicCell(int row, int col) {
+  private boolean isBasicCell(int i, int j) {
     for (int[] cell : basicCells) {
-      if (cell[0] == row && cell[1] == col) {
+      if (cell[0] == i && cell[1] == j) {
         return true;
       }
     }
     return false;
   }
 
-  // Step 3: Updating
-  public void update() {
-    // Atualiza a matriz D
-    int leavingIndex = basicCells.size() - 1; // Última célula removida no Step 1
-    int enteringIndex = basicCells.size() - 1; // Última célula adicionada no Step 2
-    int leavingRow = basicCells.get(leavingIndex)[0];
-    int leavingCol = basicCells.get(leavingIndex)[1];
-    int enteringRow = basicCells.get(enteringIndex)[0];
-    int enteringCol = basicCells.get(enteringIndex)[1];
+  private void determineEnteringCell() {
+    k = gammaCellSet.indexOf(leavingCell);
 
-    // Atualiza os elementos da coluna correspondente na matriz D
-    for (int i = 0; i < m + n; i++) {
-      D[i][leavingIndex] *= -1;
+    // Passo 2.1: Define Q and P vectors based off of D matrix
+
+    for (int j = 0; j < n; j++) {
+      Q[j] = dMatrix[j][k];
+    }
+    for (int i = 0; i < m; i++) {
+      P[i] = dMatrix[n + i][k];
     }
 
-    // Atualiza os elementos de outras colunas em D
-    for (int r = 0; r < m + n; r++) {
-      for (int c = 0; c < basicCells.size(); c++) {
-        if (c != leavingIndex) {
-          D[r][c] =
-            D[r][c] +
-            (D[enteringRow][c] - D[r][leavingIndex]) *
-            D[r][leavingIndex];
+    // System.out.println("Vector Q: " + Arrays.toString(Q));
+    // System.out.println("Vector P: " + Arrays.toString(P));
+
+    // Passo 2.2: Verificar se o problema é ilimitado e calcular theta
+
+    boolean hasValidTheta = false;
+
+    for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+        // Check if the cell is not basic
+        if (!isBasicCell(i, j)) {
+          if (P[i] - Q[j] > 0) { // Condition for a valid theta
+            theta[i][j] = costMatrix[i][j] + u[i] - v[j];
+            hasValidTheta = true;
+          } else {
+            theta[i][j] = Double.MAX_VALUE; // Indicate that the cell is not valid
+          }
+        } else {
+          theta[i][j] = Double.MAX_VALUE; // Basic cells are not valid
         }
       }
     }
 
-    // Atualiza o conjunto básico
-    basicCells.set(leavingIndex, new int[] { enteringRow, enteringCol });
+    if (!hasValidTheta) { // In case of an unbounded problem
+      System.out.println(
+        "Problema ilimitado. Não foi possível encontrar um theta válido."
+      );
+      isOptimal = true;
+      return;
+    }
 
-    // Atualiza as variáveis duais u e v
-    double[] u = new double[m];
-    double[] v = new double[n];
-    double theta = costMatrix[enteringRow][enteringCol]; // Valor de θ para atualização
+    // System.out.println("Theta Matrix: ");
+    // for (double[] row : theta) {
+    //   System.out.println(Arrays.toString(row));
+    // }
+
+    // Passo 2.3: Find the smallest theta and determine the entering cell
+    double minTheta = Double.MAX_VALUE;
+    int enteringI = -1, enteringJ = -1;
+    for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+        if (theta[i][j] < minTheta) { // Find the smallest theta
+          minTheta = theta[i][j];
+          enteringI = i;
+          enteringJ = j;
+        }
+      }
+    }
+
+    thetast = (int) minTheta;
+
+    // System.out.println("Smallest Theta: " + minTheta);
+    // System.out.println("Entering Cell: (" + enteringI + ", " + enteringJ + ")");
+
+    // Atualizar a célula de entrada
+    enteringCell = new int[] { enteringI, enteringJ };
+  }
+
+  public void updateDMatrix() {
+    double[][] nD = new double[m + n][m + n];
+
+    for (int i = 0; i < m + n; i++) {
+      nD[i][k] = -dMatrix[i][k];
+    }
+
+    for (int l = 0; l < m + n; l++) {
+      for (int r = 0; r < m + n; r++) {
+        if (r == k) continue;
+        nD[l][r] =
+          dMatrix[l][r] + (dMatrix[s + n][r] - dMatrix[t][r]) * nD[l][k];
+      }
+    }
+
+    dMatrix = nD;
+
+    // for (int i = 0; i < T.length; i++) {
+    //   for (int j = 0; j < T[i].length; j++) {
+    //     System.out.print(T[i][j] + "\t");
+    //   }
+    //   System.out.println();
+    // }
+
+    T[k][0] = s + 1;
+    T[k][1] = t + 1;
 
     for (int i = 0; i < m; i++) {
-      u[i] -= theta * D[i][leavingIndex];
+      u[i] = u[i] - thetast * P[i];
     }
     for (int j = 0; j < n; j++) {
-      v[j] -= theta * D[m + j][leavingIndex];
+      v[j] = v[j] - thetast * Q[j];
     }
 
-    // Recalcula o valor do objetivo
-    psi = calculateObjective(u, v);
+    psi = 0;
 
-    System.out.println(
-      "Célula básica atualizada: (" + enteringRow + ", " + enteringCol + ")"
-    );
-    System.out.println("Novo valor do objetivo: " + psi);
+    for (int j = 0; j < n; j++) {
+      psi += demand[j] * v[j];
+    }
+    for (int i = 0; i < m; i++) {
+      psi -= supply[i] * u[i];
+    }
+    // System.out.println("Updated u: " + Arrays.toString(u));
+    // System.out.println("Updated v: " + Arrays.toString(v));
+    //    System.out.println("Updated psi: " + psi);
   }
 
   public void solve() {
-    initialize(); // Step 0
-    while (!determineLeavingCell()) { // Step 1
-      determineEnteringCell(); // Step 2
-      update(); // Step 3
-    }
-    System.out.println("Solucao ótima encontrada. Valor do objetivo: " + psi);
-  }
+    startTime = System.currentTimeMillis();
+    // Passo 0: Inicialização
+    // System.out.println("Step 0: Initializing...");
+    A = initializeA();
 
-  public static void main(String[] args) {
-    // Exemplo de entrada
-    int m = 3, n = 2;
-    int[][] costMatrix = { { 3, 6 }, { 4, 5 }, { 7, 3 } };
-    int[] supply = { 400, 300, 400 };
-    int[] demand = { 450, 350 };
+    // System.out.println("Vector A: " + Arrays.toString(A));
 
-    System.out.println("Número de nós de oferta: " + m);
-    System.out.println("Número de nós de demanda: " + n);
+    initializeUAndComputeV();
+    // System.out.println("Vector u: " + Arrays.toString(u));
+    // System.out.println("Vector v: " + Arrays.toString(v));
 
-    System.out.println("Matriz de custos:");
+    defineBasicCellSet();
 
-    for (int i = 0; i < m; i++) {
-      for (int j = 0; j < n; j++) {
-        System.out.print(costMatrix[i][j] + " ");
+    constructDMatrix();
+    // System.out.println("Matrix D:");
+    // for (double[] row : dMatrix) {
+    //   System.out.println(Arrays.toString(row));
+    // }
+
+    computeObjectiveFunction();
+    // System.out.println("Objective function psi: " + psi);
+
+    // Iterações
+
+    while (!isOptimal) {
+      // System.out.println("Step 1: Determining the leaving cell...");
+      determineLeavingCell();
+
+      if (isOptimal) {
+        break;
       }
-      System.out.println();
+
+      // System.out.println("Step 2: Determining the entering cell...");
+      determineEnteringCell();
+
+      if (isOptimal) {
+        break;
+      }
+
+      // System.out.println("Step 3: Updating...");
+      updateDMatrix();
     }
 
-    DualMatrixTransportation solver = new DualMatrixTransportation(
-      m,
-      n,
-      costMatrix,
-      supply,
-      demand
-    );
-    solver.solve();
+    endTime = System.currentTimeMillis();
+
+    executionTime = endTime - startTime;
+
+    System.out.println("Total cost of the given problem: " + psi);
+    for (int i = 0; i < T.length; i++) {
+      System.out.println(
+        "Supply point " + T[i][0] + " and demand point " + T[i][1] + ": " + Y[i]
+      );
+    }
+
+    System.out.println("Execution time: " + executionTime + " ms");
   }
+  // public static void main(String[] args) {
+  //   int m = 3, n = 2;
+  //   int[][] costMatrix = { { 3, 6 }, { 4, 5 }, { 7, 3 } };
+  //   int[] supply = { 400, 300, 400 };
+  //   int[] demand = { 450, 350 };
+
+  //   // System.out.println("M (supply): " + m);
+  //   // System.out.println("N (demand): " + n);
+  //   // System.out.println("Cost matrix:");
+  //   // for (int[] row : costMatrix) {
+  //   // System.out.println(Arrays.toString(row));
+  //   // }
+
+  //   DualMatrixTransportation solver = new DualMatrixTransportation(
+  //     m,
+  //     n,
+  //     costMatrix,
+  //     supply,
+  //     demand
+  //   );
+  //   solver.solve();
+  // }
 }

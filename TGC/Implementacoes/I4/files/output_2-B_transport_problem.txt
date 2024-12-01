@@ -1,0 +1,24 @@
+Supply Nodes (m): 6
+Demand Nodes (n): 5
+Supply Array: [77, 41, 63, 99, 98, 41]
+Demand Array: [104, 7, 110, 81, 117]
+Cost Matrix:
+[20, 63, 94, 94, 33]
+[152, 96, 7, 61, 75]
+[47, 192, 123, 193, 45]
+[156, 171, 129, 126, 44]
+[163, 158, 2, 24, 149]
+[131, 199, 199, 81, 95]
+Total cost of the given problem: 10672.0
+Supply point 1.0 and demand point 1.0: 140.0
+Supply point 1.0 and demand point 2.0: 7.0
+Supply point 5.0 and demand point 3.0: 110.0
+Supply point 5.0 and demand point 4.0: 81.0
+Supply point 1.0 and demand point 5.0: 117.0
+Supply point 1.0 and demand point 1.0: 151.0
+Supply point 2.0 and demand point 0.0: 41.0
+Supply point 3.0 and demand point 0.0: 63.0
+Supply point 4.0 and demand point 0.0: 99.0
+Supply point 1.0 and demand point 1.0: 93.0
+Supply point 6.0 and demand point 0.0: 41.0
+Total execution time: 0 ms

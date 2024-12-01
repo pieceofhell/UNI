@@ -1,0 +1,15 @@
+Supply Nodes (m): 3
+Demand Nodes (n): 2
+Supply Array: [48, 10, 39]
+Demand Array: [13, 30]
+Cost Matrix:
+[72, 37]
+[90, 35]
+[46, 9]
+Total cost of the given problem: 972.0
+Supply point 3.0 and demand point 1.0: 9.0
+Supply point 3.0 and demand point 2.0: 30.0
+Supply point 1.0 and demand point 0.0: 44.0
+Supply point 2.0 and demand point 0.0: 10.0
+Supply point 1.0 and demand point 1.0: 4.0
+Total execution time: 0 ms

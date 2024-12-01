@@ -1,0 +1,37 @@
+Supply Nodes (m): 10
+Demand Nodes (n): 10
+Supply Array: [260, 435, 391, 70, 387, 70, 497, 472, 125, 9]
+Demand Array: [268, 103, 210, 13, 492, 311, 117, 273, 201, 288]
+Cost Matrix:
+[132, 279, 256, 206, 143, 12, 93, 103, 197, 123]
+[253, 84, 11, 174, 153, 193, 31, 202, 81, 129]
+[165, 121, 255, 223, 80, 217, 264, 274, 43, 50]
+[122, 68, 107, 229, 4, 186, 81, 265, 151, 64]
+[158, 196, 181, 281, 176, 112, 192, 136, 5, 43]
+[154, 26, 106, 108, 16, 221, 5, 23, 198, 234]
+[120, 285, 300, 52, 117, 90, 35, 32, 236, 88]
+[24, 36, 32, 49, 230, 196, 2, 44, 132, 13]
+[101, 61, 145, 263, 63, 15, 295, 121, 261, 136]
+[291, 175, 216, 205, 154, 251, 156, 190, 114, 80]
+Total cost of the given problem: 36837.0
+Supply point 1.0 and demand point 1.0: 1239.0
+Supply point 6.0 and demand point 2.0: 103.0
+Supply point 2.0 and demand point 3.0: 210.0
+Supply point 8.0 and demand point 4.0: 13.0
+Supply point 4.0 and demand point 5.0: 492.0
+Supply point 1.0 and demand point 6.0: 311.0
+Supply point 8.0 and demand point 7.0: 117.0
+Supply point 6.0 and demand point 8.0: 273.0
+Supply point 5.0 and demand point 9.0: 201.0
+Supply point 8.0 and demand point 10.0: 288.0
+Supply point 1.0 and demand point 1.0: 2018.0
+Supply point 2.0 and demand point 0.0: 225.0
+Supply point 3.0 and demand point 0.0: 391.0
+Supply point 1.0 and demand point 1.0: 422.0
+Supply point 5.0 and demand point 0.0: 186.0
+Supply point 1.0 and demand point 1.0: 306.0
+Supply point 7.0 and demand point 0.0: 497.0
+Supply point 8.0 and demand point 0.0: 3771.0
+Supply point 9.0 and demand point 0.0: 125.0
+Supply point 10.0 and demand point 0.0: 9.0
+Total execution time: 1 ms
