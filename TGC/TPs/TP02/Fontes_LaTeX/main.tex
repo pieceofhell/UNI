@@ -1,0 +1,443 @@
+	\documentclass[10pt,conference]{IEEEtran}
+\usepackage{float}
+\usepackage{cite}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{longtable}
+\ifCLASSINFOpdf
+   \usepackage[pdftex]{graphicx}
+   \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+   \usepackage[dvips]{graphicx}
+   \graphicspath{{../figs/}}
+   \DeclareGraphicsExtensions{.eps}
+\fi
+
+\usepackage[cmex10]{amsmath}
+\interdisplaylinepenalty=2500
+\usepackage{amsthm}
+\newtheorem{definition}{Definition}
+\usepackage{algorithmic}
+\usepackage{array}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+\usepackage{listings}
+\lstset{
+  language=C++,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green!40!black},
+  stringstyle=\color{orange},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  literate=%
+    {á}{{\'a}}1
+    {à}{{\`a}}1
+    {â}{{\`a}}1
+    {ã}{{\~a}}1
+    {é}{{\'e}}1
+    {ê}{{\^e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {õ}{{\~o}}1
+    {ú}{{\'u}}1
+    {ü}{{\"u}}1
+    {ç}{{\c{c}}}1
+}
+
+
+
+
+\usepackage{xcolor}
+\lstset { %
+    language=C++,
+    backgroundcolor=\color{black!5}, % set backgroundcolor
+    basicstyle=\footnotesize,% basic font setting
+}
+\usepackage{minted}
+\usepackage[most]{tcolorbox}
+\definecolor{lightgreen}{rgb}{0.56, 0.93, 0.56}
+\definecolor{moonstoneblue}{rgb}{0.45, 0.66, 0.76}
+
+
+% corrija hifenação aqui
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+\title{Relatório - Trabalho Prático II}
+
+\newif\iffinal
+\finalfalse
+\finaltrue
+\newcommand{\jemsid}{99999}
+
+\iffinal
+\author{\IEEEauthorblockN{Henrique Oliveira da Cunha Franco}
+\IEEEauthorblockA{Ciência da Computação \\
+Pontifícia Universidade Católica de Minas Gerais\\
+1448652@sga.pucminas.br}
+\and
+\IEEEauthorblockN{Bernardo Augusto Amorim Vieira}
+\IEEEauthorblockA{Ciência da Computação\\
+Pontifícia Universidade Católica de Minas Gerais\\
+1449516@sga.pucminas.br}
+}
+
+
+\else
+  \author{Sibgrapi paper ID: \jemsid \\ }
+\fi
+
+
+\maketitle
+
+\begin{abstract}
+O problema dos \(k\)-centros é uma tarefa clássica na análise de dados e está intimamente relacionado às técnicas de \textit{clustering}. Seu objetivo é identificar \(k\) vértices em um grafo completo, minimizando a maior distância de qualquer vértice do grafo ao centro mais próximo. Essa distância é conhecida como o "raio" da solução. O problema possui ampla aplicação em diversos cenários, como categorização de consumidores, alunos ou deputados, e na localização de facilidades, como hospitais ou centros de distribuição. 
+
+Embora a resolução exata seja ideal para pequenas instâncias, ela se torna inviável para problemas maiores devido à sua complexidade combinatória. Assim, abordagens aproximadas ganham destaque por oferecerem soluções aceitáveis com maior eficiência.
+
+\end{abstract}
+\IEEEpeerreviewmaketitle
+
+\section{Introdução}
+
+Este artigo visa a implementação e comparação de duas abordagens para resolver o problema dos \(k\)-centros: uma abordagem exata e outra aproximada. A primeira garante a solução ótima ao explorar todas as combinações possíveis de \(k\) centros, mas é computacionalmente inviável para instâncias grandes. A segunda, baseada em um algoritmo guloso, oferece uma solução aproximada, priorizando eficiência em cenários de maior escala.
+
+Os experimentos utilizam 40 instâncias da \textit{OR-Library}, originalmente criadas para o problema das \(p\)-medianas. Cada instância é representada por um grafo completo com custos de aresta e parâmetros como número de vértices (\(|V|\)), centros (\(k\)) e o raio da solução ótima. A análise comparativa entre as duas abordagens avalia a eficácia e eficiência de ambas, especialmente com o aumento do tamanho das instâncias.
+
+Para o pré-processamento, o algoritmo de Floyd-Warshall é empregado para calcular as menores distâncias entre todos os pares de vértices, permitindo o cálculo do raio em ambas as abordagens. A abordagem exata utiliza um método combinatório para testar todas as possíveis combinações de \(k\) vértices, enquanto a aproximada seleciona iterativamente os centros que maximizam a distância mínima ao restante do grafo. 
+
+Os resultados esperados incluem um melhor desempenho em termos de tempo de execução para a abordagem aproximada em instâncias grandes, enquanto a abordagem exata se destaca em precisão para instâncias pequenas.
+
+Este trabalho não apenas explora a resolução de um problema relevante na ciência da computação, mas também incentiva o desenvolvimento de habilidades analíticas e práticas em algoritmos e estruturas de dados.
+
+\section{Método 1: Algoritmo Guloso}
+
+\subsection*{Fase de Inicialização}
+\begin{itemize}
+    \item Crie uma lista vazia para armazenar os centros selecionados:
+    \begin{lstlisting}[language=C++]
+vector<int> centers;
+    \end{lstlisting}
+    \item Crie um vetor para rastrear as distâncias mínimas para cada vértice:
+    \begin{lstlisting}[language=C++]
+vector<int> min_distances(n + 1, INT_MAX);
+    \end{lstlisting}
+\end{itemize}
+
+\subsection*{Seleção do Primeiro Centro}
+\begin{lstlisting}[language=C++]
+int first_center = 1;
+int max_min_dist = 0;
+for (int v = 1; v <= n; v++) {
+    int min_dist = INT_MAX;
+    for (int u = 1; u <= n; u++) {
+        min_dist = min(min_dist, dist[v][u]);
+    }
+    if (min_dist > max_min_dist) {
+        max_min_dist = min_dist;
+        first_center = v;
+    }
+}
+
+centers.push_back(first_center);
+    \end{lstlisting}
+
+\begin{itemize}
+    \item Encontre um vértice que maximize a distância mínima para os outros vértices.
+    \item Este vértice torna-se o primeiro centro.
+    \item Adicione-o à lista \texttt{centers}.
+\end{itemize}
+
+\subsection{Seleção dos Centros Subsequentes}
+\begin{lstlisting}[language=C++]
+while (centers.size() < k) {
+    int max_min_distance_vertex = 0;
+    int max_min_distance = 0;
+
+    for (int v = 1; v <= n; v++) {
+        // Pule se já for um centro
+        if (find(centers.begin(), centers.end(), v) != centers.end()) continue;
+
+        int min_dist = minDistanceToCenter(v, centers);
+        if (min_dist > max_min_distance) {
+            max_min_distance = min_dist;
+            max_min_distance_vertex = v;
+        }
+    }
+
+    centers.push_back(max_min_distance_vertex);
+}
+\end{lstlisting}
+
+\textbf{Passos-Chave:}
+\begin{itemize}
+    \item Repita até que $k$ centros sejam selecionados.
+    \item Para cada vértice que não seja centro:
+    \begin{itemize}
+        \item Calcule sua distância mínima para os centros existentes.
+        \item Encontre o vértice com o máximo dessas distâncias mínimas.
+    \end{itemize}
+    \item Isso garante que cada novo centro esteja o mais distante possível dos centros existentes.
+\end{itemize}
+
+\subsection{Cálculo do Raio Máximo}
+\begin{lstlisting}[language=C++]
+int max_radius = 0;
+for (int v = 1; v <= n; v++) {
+    int min_dist = minDistanceToCenter(v, centers);
+    max_radius = max(max_radius, min_dist);
+}
+\end{lstlisting}
+\begin{itemize}
+    \item Calcule a distância máxima de qualquer vértice para o centro mais próximo.
+    \item Isso representa o "raio" da clusterização.
+\end{itemize}
+
+\subsection{Função Auxiliar: Distância Mínima aos Centros}
+\begin{lstlisting}[language=C++]
+int minDistanceToCenter(int vertex, const vector<int>& centers) {
+    int min_dist = INT_MAX;
+    for (int center : centers) {
+        min_dist = min(min_dist, dist[vertex][center]);
+    }
+    return min_dist;
+}
+\end{lstlisting}
+\begin{itemize}
+    \item Encontra a distância mínima de um vértice para qualquer um dos centros selecionados.
+\end{itemize}
+
+\subsection*{Complexidade do Algoritmo}
+\begin{itemize}
+    \item \textbf{Complexidade de Tempo:} $O(n^2k)$
+    \begin{itemize}
+        \item Selecionar centros leva $O(n^2)$ para cada uma das $k$ iterações.
+    \end{itemize}
+    \item \textbf{Complexidade de Espaço:} $O(n^2)$ devido à matriz de distâncias.
+\end{itemize}
+
+\subsection{Características do Método Guloso}
+\begin{itemize}
+    \item Não garante encontrar a solução ótima.
+    \item Fornece uma boa aproximação.
+    \item É muito mais rápido que o método exato.
+    \item Funciona bem para grafos grandes.
+\end{itemize}
+
+\subsection{Garantia Teórica}
+\begin{itemize}
+    \item O algoritmo guloso fornece uma aproximação 2.
+    \item Isso significa que a solução é, no máximo, duas vezes a solução ótima.
+\end{itemize}
+
+\subsection{Visualização do Processo}
+\begin{itemize}
+    \item Selecione o primeiro centro em uma posição "central".
+    \item Cada centro subsequente é posicionado para maximizar a cobertura.
+    \item Objetivo: Minimizar a distância máxima de qualquer ponto para o centro mais próximo.
+    \item \cite{mount2017kcenter} e \cite{geeksforgeeks_kcenter} foram consultados para implementação.
+\end{itemize}
+
+\section{Método 2: Obtenção exata para Seleção de k-Centros}
+
+\subsection{Introdução ao Pré-Processamento de Distâncias}
+Para garantir que o cálculo das distâncias entre todos os pares de vértices seja eficiente e preciso, utilizou-se o algoritmo de Floyd-Warshall. Este algoritmo permite calcular as menores distâncias entre todos os pares de vértices em um grafo ponderado. A matriz de distâncias resultante será utilizada como base tanto para o método guloso quanto para o método exato.
+
+\begin{lstlisting}[language=C++, caption=Pré-Processamento com Floyd-Warshall]
+Graph(const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        throw runtime_error("Error opening file: " + filename);
+    }
+
+    file >> n >> m >> k;
+    
+    G.resize(n + 1);
+    dist.resize(n + 1, vector<int>(n + 1, INT_MAX));
+
+    for (int i = 0; i < m; i++) {
+        int v, w, c;
+        file >> v >> w >> c;
+        
+        G[v].push_back({w, c});
+        G[w].push_back({v, c});
+
+        dist[v][w] = c;
+        dist[w][v] = c;
+    }
+
+    // Inicializa as distâncias próprias como 0
+    for (int i = 1; i <= n; i++) {
+        dist[i][i] = 0;
+    }
+
+    // Algoritmo de Floyd-Warshall
+    for (int k = 1; k <= n; k++) {
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (
+                dist[i][k] != INT_MAX && dist[k][j] != INT_MAX
+                ) {
+                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+                }
+            }
+        }
+    }
+}
+\end{lstlisting}
+
+\noindent A matriz \texttt{dist} resultante contém as menores distâncias entre cada par de vértices. Esse vetor de distâncias é essencial para o cálculo do raio máximo no método exato, garantindo que as distâncias sejam pré-computadas para acelerar as etapas subsequentes.
+
+\subsection{Descrição do Método Exato}
+O método exato utiliza uma abordagem combinatória para explorar todas as possíveis combinações de \(k\) centros, garantindo a solução absolutamente ótima. A seguir, o processo é descrito:
+
+\subsection{Estratégia de Geração de Combinações}
+\begin{lstlisting}[language=C++, caption=Código para Geração de Combinações]
+vector<int> all_vertices(n);
+iota(all_vertices.begin(), all_vertices.end(), 1);
+
+vector<bool> combination_mask(n, false);
+fill(combination_mask.begin(), combination_mask.begin() + k, true);
+\end{lstlisting}
+\begin{itemize}
+    \item Cria um vetor com todos os índices de vértices.
+    \item Utiliza uma máscara booleana para gerar combinações, iniciando com os \(k\) primeiros elementos definidos como \texttt{true} e o restante como \texttt{false}.
+\end{itemize}
+
+\subsection{Exploração das Combinações}
+\begin{lstlisting}[language=C++, caption=Código para Exploração de Combinações]
+do {
+    vector<int> current_centers;
+    for (int i = 0; i < n; i++) {
+        if (combination_mask[i]) {
+            current_centers.push_back(all_vertices[i]);
+        }
+    }
+} while (prev_permutation(combination_mask.begin(), combination_mask.end()));
+\end{lstlisting}
+\begin{itemize}
+    \item Usa \texttt{prev\_permutation()} para gerar todas as combinações possíveis de \(k\) vértices.
+    \item Para cada iteração, cria um vetor com os vértices que representam os centros potenciais atuais.
+\end{itemize}
+
+\subsection{Cálculo do Raio}
+\begin{lstlisting}[language=C++, caption=Código para Cálculo do Raio]
+int max_radius = 0;
+for (int v = 1; v <= n; v++) {
+    int min_dist = minDistanceToCenter(v, current_centers);
+    max_radius = max(max_radius, min_dist);
+}
+\end{lstlisting}
+\begin{itemize}
+    \item Para cada vértice, calcula a distância mínima até qualquer um dos centros atuais.
+    \item Registra o maior valor dessas distâncias mínimas, que corresponde ao "raio" do cluster atual.
+\end{itemize}
+
+\subsection{Rastreamento da Solução Ótima}
+\begin{lstlisting}[language=C++, caption=Código para Rastreamento da Melhor Solução]
+if (max_radius < min_max_radius) {
+    min_max_radius = max_radius;
+    best_centers = current_centers;
+}
+\end{lstlisting}
+\begin{itemize}
+    \item Mantém o controle da combinação com o menor raio máximo.
+    \item Atualiza a melhor solução sempre que uma combinação mais eficiente é encontrada.
+\end{itemize}
+
+\subsection{Análise de Complexidade Computacional}
+\begin{itemize}
+    \item \textbf{Complexidade de Tempo:} \(O(\binom{n}{k} \cdot n)\)
+        \begin{itemize}
+            \item Existem \(\binom{n}{k}\) combinações possíveis.
+            \item Para cada combinação, são necessários \(O(n)\) para calcular o raio.
+        \end{itemize}
+    \item \textbf{Complexidade de Espaço:} \(O(n)\), devido ao armazenamento dos vértices e da máscara de combinações.
+\end{itemize}
+
+\subsection{Limitações Práticas}
+\begin{itemize}
+    \item Funciona bem para grafos pequenos (\(n < 15\)).
+    \item Torna-se inviável para grafos maiores devido ao crescimento exponencial do número de combinações.
+\end{itemize}
+
+\subsection{Exemplo de Execução}
+\begin{enumerate}
+    \item Inicia com os \(k\) primeiros vértices como centros.
+    \item Calcula o raio associado a essa combinação.
+    \item Gera a próxima combinação de \(k\) vértices.
+    \item Calcula o raio da nova combinação.
+    \item Compara e mantém a combinação com o menor raio máximo.
+    \item Repete até explorar todas as combinações possíveis.
+\end{enumerate}
+
+\subsection*{Diferença para o Método Guloso}
+Fundamentalmente, a principal diferença em relação ao método guloso é que o método exato garante encontrar a solução absolutamente ótima, pois explora \textbf{todas} as combinações possíveis de centros, enquanto o método guloso faz escolhas localmente ótimas.
+
+\section{Resultados}
+A partir da obtenção dos tempos gastos para cada um dos arquivos utilizando o algoritmo guloso, foi possível elaborar a seguinte tabela:
+
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\textwidth/2, height=9cm,
+        ybar,
+        symbolic x coords={pmed1, pmed2, pmed3, pmed4, pmed5, pmed6, pmed7, pmed8, pmed9, pmed10, pmed11, pmed12, pmed13, pmed14, pmed15, pmed16, pmed17, pmed18, pmed19, pmed20},
+        xtick=data,
+        x tick label style={rotate=45, anchor=east, font=\scriptsize},
+        xlabel={\scriptsize Arquivos},
+        ylabel={\scriptsize Tempo (microsegundos)},
+        ymin=0,
+        bar width=6pt,
+        nodes near coords,
+        nodes near coords style={font=\tiny},
+        enlarge x limits=0.05,
+        grid=major,
+        title={\scriptsize Tempo de Processamento por Arquivo (Greedy)},
+        title style={font=\scriptsize},
+    ]
+    \addplot coordinates {(pmed1, 56) (pmed2, 98) (pmed3, 125) (pmed4, 254) (pmed5, 528)
+                          (pmed6, 164) (pmed7, 282) (pmed8, 583) (pmed9, 1695) (pmed10, 3591)
+                          (pmed11, 305) (pmed12, 456) (pmed13, 1626) (pmed14, 5027) (pmed15, 11505)
+                          (pmed16, 526) (pmed17, 710) (pmed18, 3696) (pmed19, 11838) (pmed20, 27422)};
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+\section{Conclusão}
+A partir da tabela apresentada, é possível observar que o tempo de processamento do algoritmo guloso de k-centros aumenta significativamente com a complexidade dos arquivos, especialmente à medida que o número de vértices e arestas cresce. 
+
+\textbf{Principais observações:}
+\begin{itemize}
+    \item Para arquivos menores, como \texttt{pmed1} a \texttt{pmed8}, o tempo de processamento permanece relativamente baixo, com variações entre 56 e 583 microsegundos. Isso reflete a eficiência do algoritmo em instâncias de menor porte.
+    \item À medida que os arquivos se tornam mais complexos, como \texttt{pmed9} a \texttt{pmed20}, o tempo de execução cresce exponencialmente, alcançando valores acima de 27.000 microsegundos para \texttt{pmed20}. Essa tendência é consistente com a complexidade teórica do algoritmo, que é $O(n^2k)$.
+    \item O crescimento no tempo de processamento é mais acentuado a partir de \texttt{pmed13}, onde os tempos saltam de 1.626 microsegundos para mais de 5.000 microsegundos, indicando a sensibilidade do algoritmo ao aumento do número de vértices e arestas.
+\end{itemize}
+
+\textbf{Implicações:}
+\begin{itemize}
+    \item Apesar de não garantir a solução ótima, o algoritmo guloso fornece uma solução aceitável em tempos razoáveis para instâncias menores ou moderadas.
+    \item Para instâncias maiores, como aquelas observadas nos arquivos \texttt{pmed18} a \texttt{pmed20}, o tempo de execução pode se tornar um fator limitante. Nesse caso, soluções mais otimizadas ou paralelizadas podem ser necessárias.
+\end{itemize}
+
+\textbf{Recomendações:}
+\begin{itemize}
+    \item Para problemas práticos que envolvam instâncias de grande escala, avaliar a viabilidade de algoritmos alternativos ou estratégias de particionamento do grafo pode ser uma abordagem promissora.
+    \item A implementação do algoritmo pode ser ajustada para reduzir custos computacionais, como a utilização de estruturas de dados mais eficientes para calcular distâncias mínimas.
+\end{itemize}
+
+Em resumo, o algoritmo guloso de k-centros é uma ferramenta eficiente para clusterização, especialmente em casos onde rapidez e simplicidade são priorizadas, mas seus limites de escalabilidade devem ser considerados em aplicações práticas.
+
+\newpage
+
+
+\bibliographystyle{IEEEtran}
+
+\bibliography{example}
+\end{document}
