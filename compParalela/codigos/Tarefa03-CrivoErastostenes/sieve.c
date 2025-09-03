@@ -44,17 +44,20 @@ Tempo paralelo: 0.71700 segundos
 #include <math.h>
 #include <omp.h>
 
-int main() {
+int main()
+{
     long long n;
     printf("Digite o valor de n: ");
-    if (scanf("%lld", &n) != 1) {
+    if (scanf("%lld", &n) != 1)
+    {
         printf("Entrada invalida.\n");
         return 1;
     }
 
     // Aloca o vetor de flags para marcar se cada número é primo
-    char *is_prime = (char*) malloc((n + 1) * sizeof(char));
-    if (!is_prime) {
+    char *is_prime = (char *)malloc((n + 1) * sizeof(char));
+    if (!is_prime)
+    {
         printf("Erro de memoria!\n");
         return 1;
     }
@@ -63,26 +66,32 @@ int main() {
 
     // --- Sequencial ---
     // Inicializa todos como primos
-    for (long long i = 0; i <= n; i++) {
+    for (long long i = 0; i <= n; i++)
+    {
         is_prime[i] = 1; // assume tudo primo
     }
     is_prime[0] = is_prime[1] = 0; // 0 e 1 não são primos
 
-    long long limite = (long long) sqrt((double) n);
+    long long limite = (long long)sqrt((double)n);
 
     start = omp_get_wtime(); // Marca o tempo inicial
-    for (long long p = 2; p <= limite; p++) {
-        if (is_prime[p]) {
+    for (long long p = 2; p <= limite; p++)
+    {
+        if (is_prime[p])
+        {
             // Marca múltiplos de p como não primos
-            for (long long j = p * (long long)p; j <= n; j += p) {
+            for (long long j = p * (long long)p; j <= n; j += p)
+            {
                 is_prime[j] = 0;
             }
         }
     }
     long long count_seq = 0;
     // Conta a quantidade de primos encontrados
-    for (long long i = 2; i <= n; i++) {
-        if (is_prime[i]) count_seq++;
+    for (long long i = 2; i <= n; i++)
+    {
+        if (is_prime[i])
+            count_seq++;
     }
     end = omp_get_wtime(); // Marca o tempo final
     double tempo_seq = end - start;
@@ -92,28 +101,34 @@ int main() {
 
     // --- Paralelo ---
     // Reinicializa todos como primos
-    for (long long i = 0; i <= n; i++) {
-        is_prime[i] = 1; 
+    for (long long i = 0; i <= n; i++)
+    {
+        is_prime[i] = 1;
     }
     is_prime[0] = is_prime[1] = 0;
 
     start = omp_get_wtime(); // Marca o tempo inicial
-    // Paraleliza o laço principal do crivo
-    #pragma omp parallel for schedule(dynamic)
-    for (long long p = 2; p <= limite; p++) {
-        if (is_prime[p]) {
+// Paraleliza o laço principal do crivo
+#pragma omp parallel for schedule(dynamic)
+    for (long long p = 2; p <= limite; p++)
+    {
+        if (is_prime[p])
+        {
             // Marca múltiplos de p como não primos
-            for (long long j = p * (long long)p; j <= n; j += p) {
+            for (long long j = p * (long long)p; j <= n; j += p)
+            {
                 is_prime[j] = 0;
             }
         }
     }
 
     long long count_par = 0;
-    // Conta os primos em paralelo usando redução
-    #pragma omp parallel for reduction(+:count_par)
-    for (long long i = 2; i <= n; i++) {
-        if (is_prime[i]) count_par++;
+// Conta os primos em paralelo usando redução
+#pragma omp parallel for reduction(+ : count_par)
+    for (long long i = 2; i <= n; i++)
+    {
+        if (is_prime[i])
+            count_par++;
     }
     end = omp_get_wtime(); // Marca o tempo final
     double tempo_par = end - start;
